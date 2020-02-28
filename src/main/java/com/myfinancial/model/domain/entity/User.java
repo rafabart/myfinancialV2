@@ -1,5 +1,6 @@
-package com.myfinancial.model.entity;
+package com.myfinancial.model.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,11 +29,13 @@ public class User extends IdAbstract {
     private String password;
 
 
+    @JsonIgnore
     @ToString.Exclude
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Category> categoryList = new ArrayList<>();
 
 
+    @JsonIgnore
     @ToString.Exclude
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Expense> expenseList = new ArrayList<>();

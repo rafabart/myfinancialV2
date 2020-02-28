@@ -1,6 +1,6 @@
 package com.myfinancial.model.repository;
 
-import com.myfinancial.model.entity.Expense;
+import com.myfinancial.model.domain.entity.Expense;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

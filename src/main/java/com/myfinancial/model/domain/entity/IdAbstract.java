@@ -1,10 +1,9 @@
-package com.myfinancial.model.entity;
+package com.myfinancial.model.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,11 +19,11 @@ public abstract class IdAbstract {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    @CreationTimestamp
-    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    @JsonIgnore
+    @CreationTimestamp()
     protected LocalDateTime createdAt;
 
+    @JsonIgnore
     @UpdateTimestamp
-    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     protected LocalDateTime updateAt;
 }

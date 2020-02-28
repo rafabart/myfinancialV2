@@ -1,4 +1,4 @@
-package com.myfinancial.model.enums;
+package com.myfinancial.model.domain.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,5 +29,22 @@ public enum ProfileType {
         }
 
         throw new IllegalArgumentException("Tipo de perfil inválido: " + cod);
+    }
+
+
+    public static ProfileType toEnum(final String name) {
+
+        if (name == null) {
+            return null;
+        }
+
+        for (ProfileType profileType : ProfileType.values()) {
+
+            if (name.equals(profileType.getName())) {
+                return profileType;
+            }
+        }
+
+        throw new IllegalArgumentException("Tipo de perfil inválido: " + name);
     }
 }

@@ -1,10 +1,10 @@
 package com.myfinancial.model.service;
 
-import com.myfinancial.model.entity.Category;
-import com.myfinancial.model.entity.Expense;
-import com.myfinancial.model.entity.User;
-import com.myfinancial.model.enums.ExpenseType;
-import com.myfinancial.model.enums.ProfileType;
+import com.myfinancial.model.domain.entity.Category;
+import com.myfinancial.model.domain.entity.Expense;
+import com.myfinancial.model.domain.entity.User;
+import com.myfinancial.model.domain.enums.ExpenseType;
+import com.myfinancial.model.domain.enums.ProfileType;
 import com.myfinancial.model.repository.CategoryRepository;
 import com.myfinancial.model.repository.ExpendeRepository;
 import com.myfinancial.model.repository.UserRepository;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 
 @Service
 public class DataInitializer implements Runnable {
@@ -63,8 +62,11 @@ public class DataInitializer implements Runnable {
 
         expendeRepository.saveAll(Arrays.asList(expenseOne, expenseTwo, expenseThree, expenseFour, expenseFive, expenseSix, expenseSeven));
 
-        List<Expense> expenseList = expendeRepository.findAll();
 
-        expenseList.forEach(expense -> System.out.println(expense));
+        expendeRepository.findAll().forEach(expense -> System.out.println(expense));
+
+        categoryRepository.findAll().forEach(category -> System.out.println(category));
+
+        userRepository.findAll().forEach(user -> System.out.println(user));
     }
 }
