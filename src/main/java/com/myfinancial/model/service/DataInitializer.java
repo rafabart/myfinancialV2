@@ -9,6 +9,7 @@ import com.myfinancial.model.repository.CategoryRepository;
 import com.myfinancial.model.repository.ExpendeRepository;
 import com.myfinancial.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -30,8 +31,8 @@ public class DataInitializer implements Runnable {
     @Override
     public void run() {
 
-        User userOne = new User("Rafael Marinho", "rafamola@gmail.com", "123456", null, null, new HashSet<>(Arrays.asList(ProfileType.ADMIN.getCod())));
-        User userTwo = new User("Corona Vírus", "corona@gmail.com", "123456", null, null, new HashSet<>(Arrays.asList(ProfileType.USER.getCod())));
+        User userOne = new User("Rafael Marinho", "rafamola@gmail.com", new BCryptPasswordEncoder().encode("123456"), null, null, new HashSet<>(Arrays.asList(ProfileType.ADMIN.getCod())));
+        User userTwo = new User("Corona Vírus", "corona@gmail.com", new BCryptPasswordEncoder().encode("123456"), null, null, new HashSet<>(Arrays.asList(ProfileType.USER.getCod())));
 
         userOne = userRepository.save(userOne);
         userTwo = userRepository.save(userTwo);

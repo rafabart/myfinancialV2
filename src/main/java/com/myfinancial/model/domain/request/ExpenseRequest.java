@@ -1,12 +1,12 @@
 package com.myfinancial.model.domain.request;
 
 import com.myfinancial.model.domain.entity.Category;
-import com.myfinancial.model.domain.enums.ExpenseType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 @Data
@@ -23,6 +23,6 @@ public class ExpenseRequest {
     @NotEmpty(message = "Campo obrigatório!")
     private String expenseTypeString;
 
-    @NotEmpty(message = "Campo obrigatório!")
+    @NotNull(message = "Campo obrigatório!")
     private Category category;
 }

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class ExpenseResource {
 
 
     @PostMapping(consumes = {"application/json"})
-    public ResponseEntity<URI> create(@RequestBody final ExpenseRequest expenseRequest) {
+    public ResponseEntity<URI> create(@Valid @RequestBody final ExpenseRequest expenseRequest) {
 
         final Long id = expenseService.create(expenseRequest);
 
@@ -62,7 +63,7 @@ public class ExpenseResource {
 
     @PutMapping(value = "/{id}", consumes = {"application/json"})
     public ResponseEntity<Void> update(@PathVariable("id") final Long id,
-                                       @RequestBody ExpenseRequest expenseRequest) {
+                                       @Valid @RequestBody ExpenseRequest expenseRequest) {
 
         expenseService.update(id, expenseRequest);
 

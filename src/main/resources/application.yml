@@ -1,3 +1,8 @@
 spring:
   profiles:
     active: test
+
+
+jwt:
+  secret: TestYourMind
+  expiration: 600000

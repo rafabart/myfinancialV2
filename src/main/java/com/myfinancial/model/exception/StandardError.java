@@ -1,4 +1,4 @@
-package com.myfinancial.exception;
+package com.myfinancial.model.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
