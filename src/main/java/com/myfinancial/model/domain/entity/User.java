@@ -5,7 +5,6 @@ import com.myfinancial.model.domain.enums.ProfileType;
 import com.myfinancial.model.domain.request.UserRequest;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -57,12 +56,10 @@ public class User extends IdAbstract {
     public User(final UserRequest userRequest) {
         this.name = userRequest.getName();
         this.email = userRequest.getEmail();
-        this.password = new BCryptPasswordEncoder().encode(userRequest.getPassword());
         this.profileList = userRequest.getProfileListSring().stream().map(profile -> ProfileType.toEnum(profile).getCod()).collect(Collectors.toSet());
     }
 
-
-    public void setPassword(final String password) {
-        this.password = new BCryptPasswordEncoder().encode(password);
+    public Set<ProfileType> getProfiles() {
+        return this.profileList.stream().map(profile -> ProfileType.toEnum(profile)).collect(Collectors.toSet());
     }
 }

@@ -2,7 +2,6 @@ package com.myfinancial.model.service.impl;
 
 import com.myfinancial.model.domain.entity.Expense;
 import com.myfinancial.model.domain.entity.User;
-import com.myfinancial.model.domain.enums.ExpenseType;
 import com.myfinancial.model.domain.request.ExpenseRequest;
 import com.myfinancial.model.domain.response.ExpenseResponse;
 import com.myfinancial.model.exception.ObjectNotFoundException;
@@ -11,6 +10,7 @@ import com.myfinancial.model.service.CategoryService;
 import com.myfinancial.model.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,6 +41,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
 
+    @Transactional
     public void delete(final Long id) {
 
         findById(id);
@@ -49,6 +50,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
 
+    @Transactional
     public Long create(final ExpenseRequest expenseRequest) {
 
         categoryService.findById(expenseRequest.getCategory().getId());
@@ -63,6 +65,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
 
+    @Transactional
     public void update(final Long id, final ExpenseRequest expenseRequest) {
 
         categoryService.findById(expenseRequest.getCategory().getId());

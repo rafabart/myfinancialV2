@@ -31,8 +31,10 @@ public class DataInitializer implements Runnable {
     @Override
     public void run() {
 
-        User userOne = new User("Rafael Marinho", "rafamola@gmail.com", new BCryptPasswordEncoder().encode("123456"), null, null, new HashSet<>(Arrays.asList(ProfileType.ADMIN.getCod())));
-        User userTwo = new User("Corona Vírus", "corona@gmail.com", new BCryptPasswordEncoder().encode("123456"), null, null, new HashSet<>(Arrays.asList(ProfileType.USER.getCod())));
+        User userOne = new User("Rafael Marinho", "rafamola@gmail.com", new BCryptPasswordEncoder().encode("123456"),
+                null, null, new HashSet<>(Arrays.asList(ProfileType.ADMIN.getCod(), ProfileType.USER.getCod())));
+        User userTwo = new User("Corona Vírus", "corona@gmail.com", new BCryptPasswordEncoder().encode("123456"),
+                null, null, new HashSet<>(Arrays.asList(ProfileType.USER.getCod())));
 
         userOne = userRepository.save(userOne);
         userTwo = userRepository.save(userTwo);

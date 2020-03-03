@@ -2,7 +2,10 @@ spring:
   profiles:
     active: test
 
-
 jwt:
   secret: TestYourMind
   expiration: 600000
+
+default:
+  sender: rafamola@gmail.com
+  recipient: rafamola@gmail.com

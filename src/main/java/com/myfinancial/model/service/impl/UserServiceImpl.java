@@ -6,9 +6,12 @@ import com.myfinancial.model.domain.response.UserResponse;
 import com.myfinancial.model.exception.EmailExistingException;
 import com.myfinancial.model.exception.ObjectNotFoundException;
 import com.myfinancial.model.repository.UserRepository;
+import com.myfinancial.model.service.EmailService;
 import com.myfinancial.model.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +21,13 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     @Autowired
+    private EmailService emailService;
+
+    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     public UserResponse findById(final Long id) {
@@ -37,6 +46,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    @Transactional
     public void delete(final Long id) {
 
         findById(id);
@@ -45,18 +55,25 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    @Transactional
     public Long create(final UserRequest userRequest) {
 
         if (userRepository.findByEmail(userRequest.getEmail()).isPresent()) {
             throw new EmailExistingException();
         }
 
-        final User user = new User(userRequest);
+        User user = new User(userRequest);
+        user.setPassword(bCryptPasswordEncoder.encode(userRequest.getPassword()));
 
-        return userRepository.save(user).getId();
+        final Long id = userRepository.save(user).getId();
+
+        emailService.sendAccountCreatedConfirmationEmail(userRequest);
+
+        return id;
     }
 
 
+    @Transactional
     public void update(final Long id, final UserRequest userRequest) {
 
         findById(id);

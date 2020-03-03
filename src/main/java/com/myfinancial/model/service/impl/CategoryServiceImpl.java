@@ -9,6 +9,7 @@ import com.myfinancial.model.repository.CategoryRepository;
 import com.myfinancial.model.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,6 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
 
+    @Transactional
     public Long create(final CategoryRequest categoryRequest) {
 
         Category category = new Category(categoryRequest);
@@ -49,6 +51,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
 
+    @Transactional
     public void delete(final Long id) {
 
         findById(id);
@@ -57,6 +60,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
 
+    @Transactional
     public void update(final Long id, CategoryRequest categoryRequest) {
 
         findById(id);

@@ -1,6 +1,8 @@
 package com.myfinancial.model.config;
 
 import com.myfinancial.model.service.DataInitializer;
+import com.myfinancial.model.service.EmailService;
+import com.myfinancial.model.service.impl.MockEmailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,5 +19,11 @@ public class TestConfig {
     @Bean
     public void InstantiateTestDatabase() {
         dataInitializer.run();
+    }
+
+
+    @Bean
+    public EmailService emailService() {
+        return new MockEmailServiceImpl();
     }
 }
