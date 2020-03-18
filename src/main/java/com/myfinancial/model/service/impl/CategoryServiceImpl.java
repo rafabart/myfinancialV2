@@ -4,9 +4,11 @@ import com.myfinancial.model.domain.entity.Category;
 import com.myfinancial.model.domain.entity.User;
 import com.myfinancial.model.domain.request.CategoryRequest;
 import com.myfinancial.model.domain.response.CategoryResponse;
+import com.myfinancial.model.exception.CategoryExistingException;
 import com.myfinancial.model.exception.ObjectNotFoundException;
 import com.myfinancial.model.repository.CategoryRepository;
 import com.myfinancial.model.service.CategoryService;
+import com.myfinancial.model.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,21 +19,29 @@ import java.util.stream.Collectors;
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
+
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private UserService userService;
 
-    public CategoryResponse findById(final Long id) {
 
-        final Category category = categoryRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Categoria"));
+    public CategoryResponse findByIdAndUser(final Long id) {
+
+        final User user = userService.getAuthenticatedUser();
+
+        final Category category = categoryRepository.findByIdAndUser(id, user).orElseThrow(() -> new ObjectNotFoundException("Categoria"));
 
         return new CategoryResponse(category);
     }
 
 
-    public List<CategoryResponse> findAll() {
+    public List<CategoryResponse> findAllByUser() {
 
-        final List<Category> categoryList = categoryRepository.findAll();
+        final User user = userService.getAuthenticatedUser();
+
+        final List<Category> categoryList = categoryRepository.findAllByUser(user);
 
         return categoryList.stream().map(category -> new CategoryResponse(category)).collect(Collectors.toList());
     }
@@ -40,10 +50,13 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public Long create(final CategoryRequest categoryRequest) {
 
-        Category category = new Category(categoryRequest);
+        final User user = userService.getAuthenticatedUser();
 
-        User user = new User();
-        user.setId(1L);
+        categoryRepository.findByNameIgnoreCaseAndUserNot(categoryRequest.getName(), user).orElseThrow(
+                () -> new CategoryExistingException()
+        );
+
+        Category category = new Category(categoryRequest);
 
         category.setUser(user);
 
@@ -54,23 +67,20 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public void delete(final Long id) {
 
-        findById(id);
+        findByIdAndUser(id);
 
         categoryRepository.deleteById(id);
     }
 
 
     @Transactional
-    public void update(final Long id, CategoryRequest categoryRequest) {
+    public void update(final Long id, final CategoryRequest categoryRequest) {
 
-        findById(id);
+        findByIdAndUser(id);
 
-        User user = new User();
-        user.setId(1L);
+        Category category = categoryRepository.getOne(id);
 
-        Category category = new Category(categoryRequest);
-        category.setId(id);
-        category.setUser(user);
+        category.updateCategory(categoryRequest);
 
         categoryRepository.save(category);
     }

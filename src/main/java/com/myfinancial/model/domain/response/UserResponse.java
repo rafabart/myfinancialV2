@@ -5,7 +5,6 @@ import com.myfinancial.model.domain.enums.ProfileType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,6 +18,8 @@ public class UserResponse {
 
     private String email;
 
+    private String password;
+
     private Set<String> profileListSring;
 
 
@@ -26,6 +27,7 @@ public class UserResponse {
         this.id = user.getId();
         this.name = user.getName();
         this.email = user.getEmail();
+        this.password = user.getPassword();
         this.profileListSring = user.getProfileList().stream().map(profileInt -> ProfileType.toEnum(profileInt).getName()).collect(Collectors.toSet());
     }
 }

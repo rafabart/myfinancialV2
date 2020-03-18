@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 
+import java.util.Arrays;
+
 @Slf4j
 public class SmtpEmailServiceImpl extends AbstractEmailServiceImpl {
 
@@ -13,8 +15,10 @@ public class SmtpEmailServiceImpl extends AbstractEmailServiceImpl {
 
     @Override
     public void sendEmail(SimpleMailMessage message) {
-        log.info("Enviando email...");
+
+        log.info("Enviando email para...");
+        log.info(Arrays.toString(message.getTo()));
         mailSender.send(message);
-        log.info("Email enviado");
+        log.info("Email enviado!");
     }
 }

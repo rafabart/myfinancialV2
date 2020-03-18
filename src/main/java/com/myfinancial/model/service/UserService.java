@@ -1,5 +1,6 @@
 package com.myfinancial.model.service;
 
+import com.myfinancial.model.domain.entity.User;
 import com.myfinancial.model.domain.request.UserRequest;
 import com.myfinancial.model.domain.response.UserResponse;
 
@@ -9,6 +10,8 @@ public interface UserService {
 
     UserResponse findById(final Long id);
 
+    UserResponse findByIdAndUser(final Long id);
+
     List<UserResponse> findAll();
 
     void delete(final Long id);
@@ -16,4 +19,6 @@ public interface UserService {
     Long create(final UserRequest userRequest);
 
     void update(final Long id, final UserRequest userRequest);
+
+    User getAuthenticatedUser();
 }

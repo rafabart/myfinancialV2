@@ -3,6 +3,7 @@ package com.myfinancial.model.domain.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.myfinancial.model.domain.enums.ProfileType;
 import com.myfinancial.model.domain.request.UserRequest;
+import com.myfinancial.model.security.UserSpringSecurity;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -31,6 +32,7 @@ public class User extends IdAbstract {
     @Column(nullable = false, unique = true)
     private String email;
 
+
     @Length(min = 6, max = 60)
     @Column(nullable = false, length = 60)
     private String password;
@@ -56,10 +58,34 @@ public class User extends IdAbstract {
     public User(final UserRequest userRequest) {
         this.name = userRequest.getName();
         this.email = userRequest.getEmail();
-        this.profileList = userRequest.getProfileListSring().stream().map(profile -> ProfileType.toEnum(profile).getCod()).collect(Collectors.toSet());
+        this.password = userRequest.getPassword();
+        this.profileList = userRequest.getProfileListSring().stream().map(
+                profile -> ProfileType.toEnum(profile).getCod()).collect(Collectors.toSet()
+        );
     }
+
+
+    public User(final UserSpringSecurity userSpringSecurity) {
+        this.id = userSpringSecurity.getId();
+        this.email = userSpringSecurity.getEmail();
+        this.password = userSpringSecurity.getPassword();
+        this.profileList = userSpringSecurity.getAuthorities().stream().map(
+                profile -> ProfileType.toEnum(profile.getAuthority()).getCod()).collect(Collectors.toSet()
+        );
+    }
+
 
     public Set<ProfileType> getProfiles() {
         return this.profileList.stream().map(profile -> ProfileType.toEnum(profile)).collect(Collectors.toSet());
+    }
+
+
+    public void updateUser(final UserRequest userRequest) {
+        this.name = userRequest.getName();
+        this.email = userRequest.getEmail();
+        this.password = userRequest.getPassword();
+        this.profileList = userRequest.getProfileListSring().stream().map(
+                profile -> ProfileType.toEnum(profile).getCod()).collect(Collectors.toSet()
+        );
     }
 }

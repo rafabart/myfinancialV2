@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -53,18 +54,19 @@ public class DataInitializer implements Runnable {
         categoryFour = categoryRepository.save(categoryFour);
         categoryFive = categoryRepository.save(categoryFour);
 
+        LocalDate dateOne = LocalDate.now();
 
-        Expense expenseOne = new Expense("Faculdade", 450.00D, ExpenseType.EXPENSE.getCod(), userOne, categoryOne);
-        Expense expenseTwo = new Expense("Curso de Inglês", 179.99D, ExpenseType.EXPENSE.getCod(), userOne, categoryOne);
-        Expense expenseThree = new Expense("Toca do Lobo", 180.00D, ExpenseType.EXPENSE.getCod(), userOne, categoryTwo);
-        Expense expenseSeven = new Expense("Salario", 180.00D, ExpenseType.INCOME.getCod(), userOne, categoryFive);
+        LocalDate dateTwo = dateOne.plusDays(3);
 
-        Expense expenseFour = new Expense("Faculdade", 320.45D, ExpenseType.EXPENSE.getCod(), userTwo, categoryThree);
-        Expense expenseFive = new Expense("Moradia", 550.00D, ExpenseType.EXPENSE.getCod(), userTwo, categoryFour);
-        Expense expenseSix = new Expense("Loja", 600.00D, ExpenseType.INCOME.getCod(), userTwo, categoryFour);
+        Expense expenseOne = new Expense("Faculdade", 450.00D, dateTwo, dateOne, ExpenseType.EXPENSE.getCod(), userOne, categoryOne);
+        Expense expenseTwo = new Expense("Curso de Inglês", 179.99D, dateTwo, dateOne, ExpenseType.EXPENSE.getCod(), userOne, categoryOne);
+        Expense expenseThree = new Expense("Toca do Lobo", 180.00D, dateTwo, dateOne, ExpenseType.EXPENSE.getCod(), userOne, categoryTwo);
+        Expense expenseSeven = new Expense("Salario", 180.00D, null, dateOne, ExpenseType.INCOME.getCod(), userOne, categoryFive);
+        Expense expenseFour = new Expense("Faculdade", 320.45D, dateTwo, dateOne, ExpenseType.EXPENSE.getCod(), userTwo, categoryThree);
+        Expense expenseFive = new Expense("Moradia", 550.00D, dateTwo, dateOne, ExpenseType.EXPENSE.getCod(), userTwo, categoryFour);
+        Expense expenseSix = new Expense("Loja", 600.00D, null, dateOne, ExpenseType.INCOME.getCod(), userTwo, categoryFour);
 
-        expendeRepository.saveAll(Arrays.asList(expenseOne, expenseTwo, expenseThree, expenseFour, expenseFive, expenseSix, expenseSeven));
-
+        expendeRepository.saveAll(Arrays.asList(expenseOne, expenseTwo, expenseThree, expenseSeven, expenseFour, expenseFive, expenseSix));
 
         expendeRepository.findAll().forEach(expense -> System.out.println(expense));
 

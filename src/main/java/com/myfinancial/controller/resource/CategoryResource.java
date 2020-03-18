@@ -21,18 +21,18 @@ public class CategoryResource {
 
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
-    public ResponseEntity<CategoryResponse> findById(@PathVariable("id") final Long id) {
+    public ResponseEntity<CategoryResponse> findByIdAndUser(@PathVariable("id") final Long id) {
 
-        final CategoryResponse categoryResponse = categoryService.findById(id);
+        final CategoryResponse categoryResponse = categoryService.findByIdAndUser(id);
 
         return ResponseEntity.ok(categoryResponse);
     }
 
 
     @GetMapping(produces = {"application/json"})
-    public ResponseEntity<List<CategoryResponse>> findAll() {
+    public ResponseEntity<List<CategoryResponse>> findAllByUser() {
 
-        final List<CategoryResponse> categoryResponseList = categoryService.findAll();
+        final List<CategoryResponse> categoryResponseList = categoryService.findAllByUser();
 
         return ResponseEntity.ok(categoryResponseList);
     }

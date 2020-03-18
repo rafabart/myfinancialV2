@@ -4,12 +4,15 @@ import com.myfinancial.model.domain.enums.ExpenseType;
 import com.myfinancial.model.domain.request.ExpenseRequest;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -31,6 +34,11 @@ public class Expense extends IdAbstract {
     private Double value;
 
 
+    private LocalDate dueDate;
+
+    private LocalDate paymentDate;
+
+
     @NotNull
     @Column(nullable = false)
     private int expenseType;
@@ -38,17 +46,21 @@ public class Expense extends IdAbstract {
 
     @NotNull
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
 
     @NotNull
     @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category category;
 
 
     public Expense(final ExpenseRequest expenseRequest) {
         this.description = expenseRequest.getDescription();
         this.value = expenseRequest.getValue();
+        this.dueDate = expenseRequest.getDueDate();
+        this.paymentDate = expenseRequest.getPaymentDate();
         this.expenseType = ExpenseType.toEnum(expenseRequest.getExpenseTypeString()).getCod();
         this.category = expenseRequest.getCategory();
     }
@@ -56,5 +68,15 @@ public class Expense extends IdAbstract {
 
     public ExpenseType getExpenseType() {
         return ExpenseType.toEnum(expenseType);
+    }
+
+
+    public void updateExpense(final ExpenseRequest expenseRequest) {
+        this.description = expenseRequest.getDescription();
+        this.value = expenseRequest.getValue();
+        this.dueDate = expenseRequest.getDueDate();
+        this.paymentDate = expenseRequest.getPaymentDate();
+        this.expenseType = ExpenseType.toEnum(expenseRequest.getExpenseTypeString()).getCod();
+        this.category = expenseRequest.getCategory();
     }
 }

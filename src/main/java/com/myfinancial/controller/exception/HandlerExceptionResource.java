@@ -1,4 +1,4 @@
-package com.myfinancial.controller.resource;
+package com.myfinancial.controller.exception;
 
 import com.myfinancial.model.exception.StandardError;
 import com.myfinancial.model.exception.ValidationError;

@@ -28,6 +28,7 @@ public class Category extends IdAbstract {
     @ManyToOne
     @JsonIgnore
     @ToString.Exclude
+    @JoinColumn(name = "user_id")
     private User user;
 
 
@@ -38,6 +39,11 @@ public class Category extends IdAbstract {
 
 
     public Category(final CategoryRequest categoryRequest) {
+        this.name = categoryRequest.getName();
+    }
+
+
+    public void updateCategory(final CategoryRequest categoryRequest) {
         this.name = categoryRequest.getName();
     }
 }

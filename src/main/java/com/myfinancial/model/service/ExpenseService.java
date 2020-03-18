@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface ExpenseService {
 
-    ExpenseResponse findById(final Long id);
+    ExpenseResponse findByIdAndUser(final Long id);
 
-    List<ExpenseResponse> findAll();
+    List<ExpenseResponse> findAllByUser();
 
     void delete(final Long id);
 

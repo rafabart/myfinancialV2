@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface CategoryService {
 
-    CategoryResponse findById(final Long id);
+    CategoryResponse findByIdAndUser(final Long id);
 
-    List<CategoryResponse> findAll();
+    List<CategoryResponse> findAllByUser();
 
     Long create(final CategoryRequest categoryRequest);
 

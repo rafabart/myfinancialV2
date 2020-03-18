@@ -5,8 +5,8 @@ import com.myfinancial.model.domain.response.UserResponse;
 import com.myfinancial.model.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.function.EntityResponse;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -22,7 +22,8 @@ public class UserResource {
     private UserService userService;
 
 
-    @GetMapping(value = "/{id}", produces = {"application/json"})
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @GetMapping(value = "/admin/{id}", produces = {"application/json"})
     public ResponseEntity<UserResponse> findById(@PathVariable("id") final Long id) {
 
         UserResponse userResponse = userService.findById(id);
@@ -31,6 +32,16 @@ public class UserResource {
     }
 
 
+    @GetMapping(value = "/{id}", produces = {"application/json"})
+    public ResponseEntity<UserResponse> findByIdAndUser(@PathVariable("id") final Long id) {
+
+        UserResponse userResponse = userService.findByIdAndUser(id);
+
+        return ResponseEntity.ok(userResponse);
+    }
+
+
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping(produces = {"application/json"})
     public ResponseEntity<List<UserResponse>> findAll() {
 
@@ -41,6 +52,7 @@ public class UserResource {
 
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable("id") final Long id) {
 
         userService.delete(id);
@@ -49,6 +61,7 @@ public class UserResource {
     }
 
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping(consumes = {"application/json"})
     public ResponseEntity<URI> create(@Valid @RequestBody final UserRequest userRequest) {
 

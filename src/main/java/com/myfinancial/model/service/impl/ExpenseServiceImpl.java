@@ -8,6 +8,7 @@ import com.myfinancial.model.exception.ObjectNotFoundException;
 import com.myfinancial.model.repository.ExpendeRepository;
 import com.myfinancial.model.service.CategoryService;
 import com.myfinancial.model.service.ExpenseService;
+import com.myfinancial.model.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,18 +25,25 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private UserService userService;
 
-    public ExpenseResponse findById(final Long id) {
 
-        final Expense expense = expendeRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Lançamento"));
+    public ExpenseResponse findByIdAndUser(final Long id) {
+
+        final User user = userService.getAuthenticatedUser();
+
+        final Expense expense = expendeRepository.findByIdAndUser(id, user).orElseThrow(() -> new ObjectNotFoundException("Lançamento"));
 
         return new ExpenseResponse(expense);
     }
 
 
-    public List<ExpenseResponse> findAll() {
+    public List<ExpenseResponse> findAllByUser() {
 
-        final List<Expense> expenseList = expendeRepository.findAll();
+        final User user = userService.getAuthenticatedUser();
+
+        final List<Expense> expenseList = expendeRepository.findAllByUser(user);
 
         return expenseList.stream().map(expense -> new ExpenseResponse(expense)).collect(Collectors.toList());
     }
@@ -44,7 +52,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Transactional
     public void delete(final Long id) {
 
-        findById(id);
+        findByIdAndUser(id);
 
         expendeRepository.deleteById(id);
     }
@@ -53,10 +61,9 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Transactional
     public Long create(final ExpenseRequest expenseRequest) {
 
-        categoryService.findById(expenseRequest.getCategory().getId());
+        categoryService.findByIdAndUser(expenseRequest.getCategory().getId());
 
-        User user = new User();
-        user.setId(1L);
+        final User user = userService.getAuthenticatedUser();
 
         Expense expense = new Expense(expenseRequest);
         expense.setUser(user);
@@ -68,16 +75,13 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Transactional
     public void update(final Long id, final ExpenseRequest expenseRequest) {
 
-        categoryService.findById(expenseRequest.getCategory().getId());
+        categoryService.findByIdAndUser(expenseRequest.getCategory().getId());
 
-        findById(id);
+        findByIdAndUser(id);
 
-        User user = new User();
-        user.setId(1L);
+        Expense expense = expendeRepository.getOne(id);
 
-        Expense expense = new Expense(expenseRequest);
-        expense.setId(id);
-        expense.setUser(user);
+        expense.updateExpense(expenseRequest);
 
         expendeRepository.save(expense);
     }

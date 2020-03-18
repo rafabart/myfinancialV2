@@ -21,18 +21,18 @@ public class ExpenseResource {
 
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
-    public ResponseEntity<ExpenseResponse> findById(@PathVariable("id") final Long id) {
+    public ResponseEntity<ExpenseResponse> findByIdAndUser(@PathVariable("id") final Long id) {
 
-        final ExpenseResponse expenseResponse = expenseService.findById(id);
+        final ExpenseResponse expenseResponse = expenseService.findByIdAndUser(id);
 
         return ResponseEntity.ok(expenseResponse);
     }
 
 
     @GetMapping(produces = {"application/json"})
-    public ResponseEntity<List<ExpenseResponse>> findAll() {
+    public ResponseEntity<List<ExpenseResponse>> findAllByUser() {
 
-        final List<ExpenseResponse> expenseResponseList = expenseService.findAll();
+        final List<ExpenseResponse> expenseResponseList = expenseService.findAllByUser();
 
         return ResponseEntity.ok(expenseResponseList);
     }

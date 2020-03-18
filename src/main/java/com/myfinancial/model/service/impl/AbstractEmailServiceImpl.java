@@ -34,9 +34,18 @@ public abstract class AbstractEmailServiceImpl implements EmailService {
 
         simpleMailMessage.setTo(user.getEmail());
         simpleMailMessage.setFrom(sender);
-        simpleMailMessage.setSubject("Solicitação de nova senha!");
+        simpleMailMessage.setSubject("\nMyFinancial: Solicitação de nova senha!\n");
         simpleMailMessage.setSentDate(new Date(System.currentTimeMillis()));
-        simpleMailMessage.setText("Nova senha: " + newPassword);
+
+        StringBuffer text = new StringBuffer();
+        text.append("\nOlá " + user.getName() + "!");
+        text.append("\nSegue abaixo sua nova senha para acesso ao MyFinancial!\n");
+        text.append("\nEmail de acesso: " + user.getEmail() + "\n");
+        text.append("Nova senha: " + newPassword + "\n");
+        text.append("\nPara acessar sua conta use o link: http://localhost:8080/login");
+
+        simpleMailMessage.setText(text.toString());
+
         return simpleMailMessage;
     }
 
