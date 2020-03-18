@@ -12,8 +12,11 @@ import java.util.Date;
 @Slf4j
 public abstract class AbstractEmailServiceImpl implements EmailService {
 
-    @Value("${default.sender}")
+    @Value("${email.sender}")
     private String sender;
+
+    @Value("${email.app_link_access}")
+    private String appLinkAccess;
 
 
     public void sendAccountCreatedConfirmationEmail(final UserRequest userRequest) {

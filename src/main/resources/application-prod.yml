@@ -1,9 +1,7 @@
 spring:
 
   datasource:
-    url: jdbc:mysql://localhost:3306/myfinacial?createDatabaseIfNotExist=true&useSSL=false
-    username: root
-    password: 12qwaszx
+    url: ${CLEARDB_DATABASE_URL}
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -13,7 +11,7 @@ spring:
       hibernate:
         format_sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: ${HIBERNATE_DLL_AUTO}
 
 
   mail:
@@ -27,3 +25,7 @@ spring:
           auth: true
           starttls:
           enable: true
+
+
+email:
+  app_link_access: ${APP_LINK_ACCESS}
