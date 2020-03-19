@@ -27,5 +27,9 @@ spring:
           enable: true
 
 
+flyway:
+  locations: classpath:/db/migration
+
+
 email:
   app_link_access: ${APP_LINK_ACCESS}

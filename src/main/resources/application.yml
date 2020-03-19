@@ -1,6 +1,28 @@
 spring:
   profiles:
-    active: prod
+#   Options: dev-local, dev and prod
+    active: ${APP_PROFILE:dev-local}
+
+
+  datasource:
+    url: jdbc:h2:file:~/db/myfinacial
+    username: sa
+    password:
+
+
+  jpa:
+    show-sql: false
+    open-in-view: true
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: create-drop
+
+
+  flyway:
+    enabled: false
 
 
 jwt:
@@ -11,3 +33,4 @@ jwt:
 email:
   sender: my.financial.v2@gmail.com
   recipient: my.financial.v2@gmail.com
+  app_link_access: http://localhost:8080/login
