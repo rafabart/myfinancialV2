@@ -1,14 +1,16 @@
 spring:
 
   datasource:
+    driver-class-name: org.postgresql.Driver
     url: ${DATABASE_URL}
-#    username: ${SPRING_DATASOURCE_USERNAME}
-#    password: ${SPRING_DATASOURCE_PASSWORD}
-#    platform: ${SPRING_JPA_DATABASE-PLATFORM}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    platform: ${SPRING_JPA_DATABASE-PLATFORM}
 
 
   jpa:
-#    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: false
     open-in-view: true
     properties:
