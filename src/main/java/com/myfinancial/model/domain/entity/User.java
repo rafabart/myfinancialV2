@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "users")
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class User extends IdAbstract {

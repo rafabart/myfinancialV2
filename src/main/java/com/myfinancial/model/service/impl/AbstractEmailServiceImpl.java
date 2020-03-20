@@ -3,13 +3,11 @@ package com.myfinancial.model.service.impl;
 import com.myfinancial.model.domain.entity.User;
 import com.myfinancial.model.domain.request.UserRequest;
 import com.myfinancial.model.service.EmailService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 
 import java.util.Date;
 
-@Slf4j
 public abstract class AbstractEmailServiceImpl implements EmailService {
 
     @Value("${email.sender}")

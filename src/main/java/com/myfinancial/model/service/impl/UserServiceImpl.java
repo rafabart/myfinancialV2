@@ -6,7 +6,6 @@ import com.myfinancial.model.domain.request.UserRequest;
 import com.myfinancial.model.domain.response.UserResponse;
 import com.myfinancial.model.exception.AuthorizationException;
 import com.myfinancial.model.exception.EmailExistingException;
-import com.myfinancial.model.exception.EmailSenderException;
 import com.myfinancial.model.exception.ObjectNotFoundException;
 import com.myfinancial.model.repository.UserRepository;
 import com.myfinancial.model.security.UserSpringSecurity;
@@ -86,11 +85,11 @@ public class UserServiceImpl implements UserService {
 
         final Long id = userRepository.save(user).getId();
 
-        try {
+//        try {
             emailService.sendAccountCreatedConfirmationEmail(userRequest);
-        } catch (Exception e) {
-            throw new EmailSenderException("Não foi possível enviar o email, o novo usuário não foi criado!");
-        }
+//        } catch (Exception e) {
+//            throw new EmailSenderException("Não foi possível enviar o email, o novo usuário não foi criado!");
+//        }
 
         return id;
     }

@@ -1,7 +1,11 @@
 spring:
 
   datasource:
-    url: ${CLEARDB_DATABASE_URL}
+    url: ${DATABASE_URL}
+#    username: ${SPRING_DATASOURCE_USERNAME}
+#    password: ${SPRING_DATASOURCE_PASSWORD}
+#    platform: ${SPRING_JPA_DATABASE-PLATFORM}
+
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect

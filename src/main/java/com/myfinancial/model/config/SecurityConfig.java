@@ -51,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        if (Arrays.asList(environment.getActiveProfiles()).contains("test")) {
+        if (Arrays.asList(environment.getActiveProfiles()).contains("dev-local")) {
             http.headers().frameOptions().disable();
         }
 

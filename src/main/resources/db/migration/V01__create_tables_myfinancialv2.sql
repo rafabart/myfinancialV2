@@ -5,6 +5,8 @@ USE `myfinacial`;
 -- ------------------------------------------------------
 -- Server version	8.0.19
 
+postgres://twphtjjzhdysic:337828b4ccfadee73eff7f725722c8f9d2ba2f2388c590f3485cfea272f60347@ec2-18-210-51-239.compute-1.amazonaws.com:5432/d6l5tr0on84g0a
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
