@@ -32,10 +32,6 @@ spring:
             enable: true
 
 
-  flyway:
-    locations: classpath:/db/dev-migration
-
-
 email:
   app_link_access: http://localhost:8080/login
 
