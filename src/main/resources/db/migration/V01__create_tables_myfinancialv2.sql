@@ -68,6 +68,11 @@ create TABLE public.user_profile_list (
 	CONSTRAINT fkisn0eyxbbyq84upkg5smdbdkp FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-insert into public.users (created_at,update_at,email,"name","password") VALUES
-('2020-03-20 14:42:44.661','2020-03-20 14:44:35.283','rafamola@gmail.com','Rafael Marinho','$2a$10$pWPVaNp2d75OlUYRkH0mg.VYrgJNeChE9Z9f3CmC.FbTvyykKO5ZC')
-;
+
+insert INTO public.users (id, created_at,update_at,email,"name","password") VALUES
+(1,NOW(),NOW(),'my.financial.v2@gmail.com','Rafael Marinho','$2a$10$pWPVaNp2d75OlUYRkH0mg.VYrgJNeChE9Z9f3CmC.FbTvyykKO5ZC');
+
+
+insert INTO public.category (id,created_at,update_at,"name",user_id) VALUES
+(1,'2020-03-23 16:13:46.794','2020-03-23 16:13:46.794','Educação',1)
+,(2,'2020-03-23 16:13:46.828','2020-03-23 16:13:46.828','Diversão',1)

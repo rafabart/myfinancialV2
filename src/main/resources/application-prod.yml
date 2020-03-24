@@ -29,11 +29,11 @@ spring:
         smtp:
           auth: true
           starttls:
-          enable: true
+            enable: true
 
 
 flyway:
-  enabled: false
+  enabled: true
   locations: classpath:/db/migration
 
 
