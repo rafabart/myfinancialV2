@@ -70,7 +70,7 @@ create TABLE public.user_profile_list (
 
 
 insert INTO public.users (id, created_at,update_at,email,"name","password") VALUES
-(1,NOW(),NOW(),'my.financial.v2@gmail.com','Rafael Marinho','$2a$10$pWPVaNp2d75OlUYRkH0mg.VYrgJNeChE9Z9f3CmC.FbTvyykKO5ZC');
+(1,NOW(),NOW(),'rafamola@gmail.com','Rafael Marinho','$2a$10$pWPVaNp2d75OlUYRkH0mg.VYrgJNeChE9Z9f3CmC.FbTvyykKO5ZC');
 
 
 insert INTO public.category (id,created_at,update_at,"name",user_id) VALUES
