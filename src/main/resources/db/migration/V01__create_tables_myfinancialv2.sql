@@ -5,7 +5,7 @@
 -- DROP TABLE public.users;
 
 create TABLE public.users (
-	id int8 NOT NULL,
+	id SERIAL,
 	created_at timestamp NULL,
 	update_at timestamp NULL,
 	email varchar(255) NOT NULL,
@@ -23,7 +23,7 @@ create TABLE public.users (
 -- DROP TABLE public.category;
 
 create TABLE public.category (
-	id int8 NOT NULL,
+	id SERIAL,
 	created_at timestamp NULL,
 	update_at timestamp NULL,
 	"name" varchar(40) NOT NULL,
@@ -40,7 +40,7 @@ create TABLE public.category (
 -- DROP TABLE public.expense;
 
 create TABLE public.expense (
-	id int8 NOT NULL,
+	id SERIAL,
 	created_at timestamp NULL,
 	update_at timestamp NULL,
 	description varchar(100) NOT NULL,

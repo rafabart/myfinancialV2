@@ -1,6 +1,10 @@
+#   active:
+#            dev-local  (H2 Database)
+#            dev        (Postgres Database)
+#            prod       (Heroku Postgres Database with flyway)
+
 spring:
   profiles:
-#   Options: dev-local, dev and prod
     active: ${APP_PROFILE:dev}
 
 

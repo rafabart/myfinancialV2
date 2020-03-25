@@ -52,9 +52,9 @@ public class CategoryServiceImpl implements CategoryService {
 
         final User user = userService.getAuthenticatedUser();
 
-        categoryRepository.findByNameIgnoreCaseAndUserNot(categoryRequest.getName(), user).orElseThrow(
-                () -> new CategoryExistingException()
-        );
+        if (categoryRepository.findByNameIgnoreCaseAndUser(categoryRequest.getName(), user).isPresent()) {
+            throw new CategoryExistingException();
+        }
 
         Category category = new Category(categoryRequest);
 
