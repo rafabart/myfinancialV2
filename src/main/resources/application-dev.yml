@@ -12,11 +12,11 @@ spring:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: true
-    hibernate:
-      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
+    hibernate:
+      ddl-auto: create
 
 
   mail:
@@ -30,6 +30,11 @@ spring:
           auth: true
           starttls:
             enable: true
+
+
+  flyway:
+    enabled: false
+    locations: classpath:/db/migration
 
 
 email:

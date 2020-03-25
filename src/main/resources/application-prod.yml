@@ -32,9 +32,9 @@ spring:
             enable: true
 
 
-flyway:
-  enabled: true
-  locations: classpath:/db/migration
+  flyway:
+    enabled: true
+    locations: classpath:/db/migration
 
 
 email:
