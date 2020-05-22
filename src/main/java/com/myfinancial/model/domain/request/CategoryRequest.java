@@ -10,6 +10,7 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 public class CategoryRequest {
 
+    private Long id;
 
     @NotEmpty(message = "Campo obrigatório!")
     @Length(min = 3, max = 40, message = "O tamanho deve ser entre {min} e {max} caracteres!")

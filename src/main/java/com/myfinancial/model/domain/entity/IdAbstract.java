@@ -2,6 +2,7 @@ package com.myfinancial.model.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 
 @Data
 @MappedSuperclass
+@EqualsAndHashCode(of="id")
 public abstract class IdAbstract {
 
     @Id

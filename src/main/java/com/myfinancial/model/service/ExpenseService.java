@@ -15,5 +15,5 @@ public interface ExpenseService {
 
     Long create(final ExpenseRequest expenseRequest);
 
-    void update(final Long id, final ExpenseRequest expenseRequest);
+    void update(final ExpenseRequest expenseRequest);
 }

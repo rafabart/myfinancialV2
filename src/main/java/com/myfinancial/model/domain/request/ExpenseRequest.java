@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -15,6 +14,8 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 public class ExpenseRequest {
+
+    private Long id;
 
     @NotEmpty(message = "Campo obrigatório!")
     @Length(min = 3, max = 100, message = "O tamanho deve ser entre {min} e {max} caracteres!")
@@ -30,7 +31,7 @@ public class ExpenseRequest {
     private LocalDate paymentDate;
 
     @NotEmpty(message = "Campo obrigatório!")
-    private String expenseTypeString;
+    private String expenseType;
 
     @NotNull(message = "Campo obrigatório!")
     private Category category;

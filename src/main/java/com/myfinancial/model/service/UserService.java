@@ -1,6 +1,6 @@
 package com.myfinancial.model.service;
 
-import com.myfinancial.model.domain.entity.User;
+import com.myfinancial.model.domain.entity.Customer;
 import com.myfinancial.model.domain.request.UserRequest;
 import com.myfinancial.model.domain.response.UserResponse;
 
@@ -20,5 +20,5 @@ public interface UserService {
 
     void update(final Long id, final UserRequest userRequest);
 
-    User getAuthenticatedUser();
+    Customer getAuthenticatedUser();
 }

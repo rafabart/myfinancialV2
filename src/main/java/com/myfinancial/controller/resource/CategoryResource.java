@@ -4,6 +4,7 @@ import com.myfinancial.model.domain.request.CategoryRequest;
 import com.myfinancial.model.domain.response.CategoryResponse;
 import com.myfinancial.model.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -20,19 +21,19 @@ public class CategoryResource {
     private CategoryService categoryService;
 
 
-    @GetMapping(value = "/{id}", produces = {"application/json"})
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CategoryResponse> findByIdAndUser(@PathVariable("id") final Long id) {
 
-        final CategoryResponse categoryResponse = categoryService.findByIdAndUser(id);
+        final CategoryResponse categoryResponse = categoryService.findByIdAndCustomer(id);
 
         return ResponseEntity.ok(categoryResponse);
     }
 
 
-    @GetMapping(produces = {"application/json"})
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CategoryResponse>> findAllByUser() {
 
-        final List<CategoryResponse> categoryResponseList = categoryService.findAllByUser();
+        final List<CategoryResponse> categoryResponseList = categoryService.findAllByCustomer();
 
         return ResponseEntity.ok(categoryResponseList);
     }
@@ -47,7 +48,7 @@ public class CategoryResource {
     }
 
 
-    @PostMapping(consumes = {"application/json"})
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<URI> create(@Valid @RequestBody final CategoryRequest categoryRequest) {
 
         final Long id = categoryService.create(categoryRequest);
@@ -61,11 +62,10 @@ public class CategoryResource {
     }
 
 
-    @PutMapping(value = "/{id}", consumes = {"application/json"})
-    public ResponseEntity<Void> update(@PathVariable("id") final Long id,
-                                       @Valid @RequestBody final CategoryRequest categoryRequest) {
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> update(@Valid @RequestBody final CategoryRequest categoryRequest) {
 
-        categoryService.update(id, categoryRequest);
+        categoryService.update(categoryRequest);
 
         return ResponseEntity.noContent().build();
     }

@@ -1,6 +1,6 @@
 package com.myfinancial.model.service.impl;
 
-import com.myfinancial.model.domain.entity.User;
+import com.myfinancial.model.domain.entity.Customer;
 import com.myfinancial.model.domain.request.UserRequest;
 import com.myfinancial.model.service.EmailService;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,25 +23,25 @@ public abstract class AbstractEmailServiceImpl implements EmailService {
     }
 
 
-    public void sendNewPasswordEmail(final User user, final String newPassword) {
-        final SimpleMailMessage simpleMailMessage = prepareSimpleMailMessageFromNewPassword(user, newPassword);
+    public void sendNewPasswordEmail(final Customer customer, final String newPassword) {
+        final SimpleMailMessage simpleMailMessage = prepareSimpleMailMessageFromNewPassword(customer, newPassword);
         sendEmail(simpleMailMessage);
     }
 
 
-    protected SimpleMailMessage prepareSimpleMailMessageFromNewPassword(final User user, final String newPassword) {
+    protected SimpleMailMessage prepareSimpleMailMessageFromNewPassword(final Customer customer, final String newPassword) {
 
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 
-        simpleMailMessage.setTo(user.getEmail());
+        simpleMailMessage.setTo(customer.getEmail());
         simpleMailMessage.setFrom(sender);
         simpleMailMessage.setSubject("\nMyFinancial: Solicitação de nova senha!\n");
         simpleMailMessage.setSentDate(new Date(System.currentTimeMillis()));
 
         StringBuffer text = new StringBuffer();
-        text.append("\nOlá " + user.getName() + "!");
+        text.append("\nOlá " + customer.getName() + "!");
         text.append("\nSegue abaixo sua nova senha para acesso ao MyFinancial!\n");
-        text.append("\nEmail de acesso: " + user.getEmail() + "\n");
+        text.append("\nEmail de acesso: " + customer.getEmail() + "\n");
         text.append("Nova senha: " + newPassword + "\n");
         text.append("\nPara acessar sua conta use o link: http://localhost:8080/login");
 

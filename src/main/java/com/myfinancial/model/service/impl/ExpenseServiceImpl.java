@@ -1,10 +1,11 @@
 package com.myfinancial.model.service.impl;
 
 import com.myfinancial.model.domain.entity.Expense;
-import com.myfinancial.model.domain.entity.User;
+import com.myfinancial.model.domain.entity.Customer;
 import com.myfinancial.model.domain.request.ExpenseRequest;
 import com.myfinancial.model.domain.response.ExpenseResponse;
 import com.myfinancial.model.exception.ObjectNotFoundException;
+import com.myfinancial.model.mapper.ExpenseMapper;
 import com.myfinancial.model.repository.ExpendeRepository;
 import com.myfinancial.model.service.CategoryService;
 import com.myfinancial.model.service.ExpenseService;
@@ -23,6 +24,9 @@ public class ExpenseServiceImpl implements ExpenseService {
     private ExpendeRepository expendeRepository;
 
     @Autowired
+    private ExpenseMapper expenseMapper;
+
+    @Autowired
     private CategoryService categoryService;
 
     @Autowired
@@ -31,21 +35,21 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     public ExpenseResponse findByIdAndUser(final Long id) {
 
-        final User user = userService.getAuthenticatedUser();
+        final Customer customer = userService.getAuthenticatedUser();
 
-        final Expense expense = expendeRepository.findByIdAndUser(id, user).orElseThrow(() -> new ObjectNotFoundException("Lançamento"));
+        final Expense expense = expendeRepository.findByIdAndCustomer(id, customer).orElseThrow(() -> new ObjectNotFoundException("Lançamento"));
 
-        return new ExpenseResponse(expense);
+        return expenseMapper.toReponse(expense);
     }
 
 
     public List<ExpenseResponse> findAllByUser() {
 
-        final User user = userService.getAuthenticatedUser();
+        final Customer customer = userService.getAuthenticatedUser();
 
-        final List<Expense> expenseList = expendeRepository.findAllByUser(user);
+        final List<Expense> expenseList = expendeRepository.findAllByCustomer(customer);
 
-        return expenseList.stream().map(expense -> new ExpenseResponse(expense)).collect(Collectors.toList());
+        return expenseMapper.toResponseList(expenseList);
     }
 
 
@@ -61,27 +65,26 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Transactional
     public Long create(final ExpenseRequest expenseRequest) {
 
-        categoryService.findByIdAndUser(expenseRequest.getCategory().getId());
+        categoryService.findByIdAndCustomer(expenseRequest.getCategory().getId());
 
-        final User user = userService.getAuthenticatedUser();
+        final Customer customer = userService.getAuthenticatedUser();
 
-        Expense expense = new Expense(expenseRequest);
-        expense.setUser(user);
+        Expense expense = expenseMapper.to(expenseRequest, customer);
 
         return expendeRepository.save(expense).getId();
     }
 
 
     @Transactional
-    public void update(final Long id, final ExpenseRequest expenseRequest) {
+    public void update(final ExpenseRequest expenseRequest) {
 
-        categoryService.findByIdAndUser(expenseRequest.getCategory().getId());
+        categoryService.findByIdAndCustomer(expenseRequest.getCategory().getId());
 
-        findByIdAndUser(id);
+        findByIdAndUser(expenseRequest.getId());
 
-        Expense expense = expendeRepository.getOne(id);
+        Expense expense = expendeRepository.getOne(expenseRequest.getId());
 
-        expense.updateExpense(expenseRequest);
+        expenseMapper.toUpdate(expense, expenseRequest);
 
         expendeRepository.save(expense);
     }

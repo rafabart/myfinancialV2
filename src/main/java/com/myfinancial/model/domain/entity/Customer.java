@@ -19,10 +19,9 @@ import java.util.stream.Collectors;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users")
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class User extends IdAbstract {
+public class Customer extends IdAbstract {
 
     @Length(min = 3, max = 80)
     @Column(nullable = false, length = 80)
@@ -41,13 +40,13 @@ public class User extends IdAbstract {
 
     @JsonIgnore
     @ToString.Exclude
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE)
     private List<Category> categoryList = new ArrayList<>();
 
 
     @JsonIgnore
     @ToString.Exclude
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE)
     private List<Expense> expenseList = new ArrayList<>();
 
 
@@ -56,7 +55,7 @@ public class User extends IdAbstract {
     private Set<Integer> profileList = new HashSet<>();
 
 
-    public User(final UserRequest userRequest) {
+    public Customer(final UserRequest userRequest) {
         this.name = userRequest.getName();
         this.email = userRequest.getEmail();
         this.password = userRequest.getPassword();
@@ -66,7 +65,7 @@ public class User extends IdAbstract {
     }
 
 
-    public User(final UserSpringSecurity userSpringSecurity) {
+    public Customer(final UserSpringSecurity userSpringSecurity) {
         this.id = userSpringSecurity.getId();
         this.email = userSpringSecurity.getEmail();
         this.password = userSpringSecurity.getPassword();

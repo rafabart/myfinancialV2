@@ -1,6 +1,6 @@
 package com.myfinancial.model.domain.response;
 
-import com.myfinancial.model.domain.entity.User;
+import com.myfinancial.model.domain.entity.Customer;
 import com.myfinancial.model.domain.enums.ProfileType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,11 +23,11 @@ public class UserResponse {
     private Set<String> profileListSring;
 
 
-    public UserResponse(final User user) {
-        this.id = user.getId();
-        this.name = user.getName();
-        this.email = user.getEmail();
-        this.password = user.getPassword();
-        this.profileListSring = user.getProfileList().stream().map(profileInt -> ProfileType.toEnum(profileInt).getName()).collect(Collectors.toSet());
+    public UserResponse(final Customer customer) {
+        this.id = customer.getId();
+        this.name = customer.getName();
+        this.email = customer.getEmail();
+        this.password = customer.getPassword();
+        this.profileListSring = customer.getProfileList().stream().map(profileInt -> ProfileType.toEnum(profileInt).getName()).collect(Collectors.toSet());
     }
 }

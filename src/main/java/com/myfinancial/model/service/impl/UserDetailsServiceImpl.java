@@ -1,7 +1,7 @@
 package com.myfinancial.model.service.impl;
 
-import com.myfinancial.model.domain.entity.User;
-import com.myfinancial.model.repository.UserRepository;
+import com.myfinancial.model.domain.entity.Customer;
+import com.myfinancial.model.repository.CustomerRepository;
 import com.myfinancial.model.security.UserSpringSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,14 +14,14 @@ import org.springframework.stereotype.Service;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository;
+    private CustomerRepository customerRepository;
 
 
     @Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
 
-        final User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
+        final Customer customer = customerRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
 
-        return new UserSpringSecurity(user.getId(), user.getEmail(), user.getPassword(), user.getProfiles());
+        return new UserSpringSecurity(customer.getId(), customer.getEmail(), customer.getPassword(), customer.getProfiles());
     }
 }

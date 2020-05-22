@@ -1,13 +1,13 @@
 package com.myfinancial.model.service.impl;
 
-import com.myfinancial.model.domain.entity.User;
+import com.myfinancial.model.domain.entity.Customer;
 import com.myfinancial.model.domain.enums.ProfileType;
 import com.myfinancial.model.domain.request.UserRequest;
 import com.myfinancial.model.domain.response.UserResponse;
 import com.myfinancial.model.exception.AuthorizationException;
 import com.myfinancial.model.exception.EmailExistingException;
 import com.myfinancial.model.exception.ObjectNotFoundException;
-import com.myfinancial.model.repository.UserRepository;
+import com.myfinancial.model.repository.CustomerRepository;
 import com.myfinancial.model.security.UserSpringSecurity;
 import com.myfinancial.model.service.EmailService;
 import com.myfinancial.model.service.UserService;
@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
     private EmailService emailService;
 
     @Autowired
-    private UserRepository userRepository;
+    private CustomerRepository customerRepository;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -36,31 +36,31 @@ public class UserServiceImpl implements UserService {
 
     public UserResponse findById(final Long id) {
 
-        final User user = userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Usuário"));
+        final Customer customer = customerRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Usuário"));
 
-        return new UserResponse(user);
+        return new UserResponse(customer);
     }
 
 
     public UserResponse findByIdAndUser(final Long id) {
 
-        final User userAuthenticated = getAuthenticatedUser();
+        final Customer customerAuthenticated = getAuthenticatedUser();
 
-        final User user = userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Usuário"));
+        final Customer customer = customerRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Usuário"));
 
-        if (!user.getId().equals(userAuthenticated.getId())) {
+        if (!customer.getId().equals(customerAuthenticated.getId())) {
             throw new AuthorizationException();
         }
 
-        return new UserResponse(user);
+        return new UserResponse(customer);
     }
 
 
     public List<UserResponse> findAll() {
 
-        List<User> userList = userRepository.findAll();
+        List<Customer> customerList = customerRepository.findAll();
 
-        return userList.stream().map(user -> new UserResponse(user)).collect(Collectors.toList());
+        return customerList.stream().map(user -> new UserResponse(user)).collect(Collectors.toList());
     }
 
 
@@ -69,21 +69,21 @@ public class UserServiceImpl implements UserService {
 
         findById(id);
 
-        userRepository.deleteById(id);
+        customerRepository.deleteById(id);
     }
 
 
     @Transactional
     public Long create(final UserRequest userRequest) {
 
-        if (userRepository.findByEmail(userRequest.getEmail()).isPresent()) {
+        if (customerRepository.findByEmail(userRequest.getEmail()).isPresent()) {
             throw new EmailExistingException();
         }
 
-        User user = new User(userRequest);
-        user.setPassword(bCryptPasswordEncoder.encode(userRequest.getPassword()));
+        Customer customer = new Customer(userRequest);
+        customer.setPassword(bCryptPasswordEncoder.encode(userRequest.getPassword()));
 
-        final Long id = userRepository.save(user).getId();
+        final Long id = customerRepository.save(customer).getId();
 
 //        try {
             emailService.sendAccountCreatedConfirmationEmail(userRequest);
@@ -100,42 +100,42 @@ public class UserServiceImpl implements UserService {
 
         findById(id);
 
-        User user = getAuthenticatedUser();
+        Customer customer = getAuthenticatedUser();
 
-        if (user.getId() != id && !user.getProfileList().contains(ProfileType.ADMIN.getCod())) {
+        if (customer.getId() != id && !customer.getProfileList().contains(ProfileType.ADMIN.getCod())) {
             throw new AuthorizationException();
         }
 
-        if (!user.getProfileList().contains(ProfileType.ADMIN.getCod()) && userRequest.getProfileListSring().contains(ProfileType.ADMIN.getName())) {
+        if (!customer.getProfileList().contains(ProfileType.ADMIN.getCod()) && userRequest.getProfileListSring().contains(ProfileType.ADMIN.getName())) {
             throw new AuthorizationException();
         }
 
-        Optional<User> userOptional = userRepository.findByEmail(userRequest.getEmail());
+        Optional<Customer> userOptional = customerRepository.findByEmail(userRequest.getEmail());
 
         if (userOptional.isPresent() && userOptional.get().getId() != id) {
             throw new EmailExistingException();
         }
 
-        if (!user.getPassword().equals(userRequest.getPassword())) {
+        if (!customer.getPassword().equals(userRequest.getPassword())) {
             userRequest.setPassword(bCryptPasswordEncoder.encode(userRequest.getPassword()));
         }
 
-        user = userRepository.getOne(id);
-        user.updateUser(userRequest);
+        customer = customerRepository.getOne(id);
+        customer.updateUser(userRequest);
 
-        userRepository.save(user);
+        customerRepository.save(customer);
     }
 
 
-    public User getAuthenticatedUser() {
+    public Customer getAuthenticatedUser() {
 
 
         try {
             final UserSpringSecurity userSpringSecurity = (UserSpringSecurity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-            final User user = new User(userSpringSecurity);
+            final Customer customer = new Customer(userSpringSecurity);
 
-            return user;
+            return customer;
 
         } catch (Exception e) {
             throw new AuthorizationException();

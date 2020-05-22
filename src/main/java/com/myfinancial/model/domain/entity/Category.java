@@ -1,7 +1,6 @@
 package com.myfinancial.model.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.myfinancial.model.domain.request.CategoryRequest;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -13,37 +12,29 @@ import java.util.List;
 @Data
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class Category extends IdAbstract {
 
     @NotNull
+    @NonNull
     @Length(min = 3, max = 40)
     @Column(nullable = false, length = 40)
     private String name;
 
 
     @NotNull
+    @NonNull
     @ManyToOne
     @JsonIgnore
     @ToString.Exclude
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
 
     @JsonIgnore
     @ToString.Exclude
     @OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE)
     private List<Expense> expenseList = new ArrayList<>();
-
-
-    public Category(final CategoryRequest categoryRequest) {
-        this.name = categoryRequest.getName();
-    }
-
-
-    public void updateCategory(final CategoryRequest categoryRequest) {
-        this.name = categoryRequest.getName();
-    }
 }

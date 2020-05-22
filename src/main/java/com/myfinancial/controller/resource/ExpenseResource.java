@@ -4,6 +4,7 @@ import com.myfinancial.model.domain.request.ExpenseRequest;
 import com.myfinancial.model.domain.response.ExpenseResponse;
 import com.myfinancial.model.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -20,7 +21,7 @@ public class ExpenseResource {
     private ExpenseService expenseService;
 
 
-    @GetMapping(value = "/{id}", produces = {"application/json"})
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ExpenseResponse> findByIdAndUser(@PathVariable("id") final Long id) {
 
         final ExpenseResponse expenseResponse = expenseService.findByIdAndUser(id);
@@ -29,7 +30,7 @@ public class ExpenseResource {
     }
 
 
-    @GetMapping(produces = {"application/json"})
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ExpenseResponse>> findAllByUser() {
 
         final List<ExpenseResponse> expenseResponseList = expenseService.findAllByUser();
@@ -47,7 +48,7 @@ public class ExpenseResource {
     }
 
 
-    @PostMapping(consumes = {"application/json"})
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<URI> create(@Valid @RequestBody final ExpenseRequest expenseRequest) {
 
         final Long id = expenseService.create(expenseRequest);
@@ -61,11 +62,10 @@ public class ExpenseResource {
     }
 
 
-    @PutMapping(value = "/{id}", consumes = {"application/json"})
-    public ResponseEntity<Void> update(@PathVariable("id") final Long id,
-                                       @Valid @RequestBody ExpenseRequest expenseRequest) {
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> update(@Valid @RequestBody ExpenseRequest expenseRequest) {
 
-        expenseService.update(id, expenseRequest);
+        expenseService.update(expenseRequest);
 
         return ResponseEntity.noContent().build();
     }

@@ -1,7 +1,7 @@
 package com.myfinancial.model.repository;
 
 import com.myfinancial.model.domain.entity.Expense;
-import com.myfinancial.model.domain.entity.User;
+import com.myfinancial.model.domain.entity.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface ExpendeRepository extends JpaRepository<Expense, Long> {
 
-    Optional<Expense> findByIdAndUser(final Long id, final User user);
+    Optional<Expense> findByIdAndCustomer(final Long id, final Customer customer);
 
-    List<Expense> findAllByUser(final User user);
+    List<Expense> findAllByCustomer(final Customer customer);
 }

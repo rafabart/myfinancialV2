@@ -1,9 +1,9 @@
 package com.myfinancial.model.service.impl;
 
-import com.myfinancial.model.domain.entity.User;
+import com.myfinancial.model.domain.entity.Customer;
 import com.myfinancial.model.exception.EmailSenderException;
 import com.myfinancial.model.exception.ObjectNotFoundException;
-import com.myfinancial.model.repository.UserRepository;
+import com.myfinancial.model.repository.CustomerRepository;
 import com.myfinancial.model.service.AuthService;
 import com.myfinancial.model.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class AuthServiceImpl implements AuthService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    private UserRepository userRepository;
+    private CustomerRepository customerRepository;
 
     @Autowired
     private EmailService emailService;
@@ -31,14 +31,14 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public void sendNewPassword(final String email) {
 
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new ObjectNotFoundException("Email"));
+        Customer customer = customerRepository.findByEmail(email).orElseThrow(() -> new ObjectNotFoundException("Email"));
 
         String newPass = newPassword();
-        user.setPassword(bCryptPasswordEncoder.encode(newPass));
+        customer.setPassword(bCryptPasswordEncoder.encode(newPass));
 
-        userRepository.save(user);
+        customerRepository.save(customer);
         try {
-            emailService.sendNewPasswordEmail(user, newPass);
+            emailService.sendNewPasswordEmail(customer, newPass);
         } catch (Exception e) {
             throw new EmailSenderException("Não foi possível enviar o email, não foi criada a nova senha!");
         }
