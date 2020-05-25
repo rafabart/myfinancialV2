@@ -2,15 +2,17 @@ package com.myfinancial.model.service.impl;
 
 import com.myfinancial.model.domain.entity.Customer;
 import com.myfinancial.model.domain.enums.ProfileType;
-import com.myfinancial.model.domain.request.UserRequest;
-import com.myfinancial.model.domain.response.UserResponse;
+import com.myfinancial.model.domain.request.CustomerRequest;
+import com.myfinancial.model.domain.response.CustomerResponse;
 import com.myfinancial.model.exception.AuthorizationException;
 import com.myfinancial.model.exception.EmailExistingException;
 import com.myfinancial.model.exception.ObjectNotFoundException;
+import com.myfinancial.model.mapper.CustomerMapper;
 import com.myfinancial.model.repository.CustomerRepository;
 import com.myfinancial.model.security.UserSpringSecurity;
+import com.myfinancial.model.service.CustomerService;
 import com.myfinancial.model.service.EmailService;
-import com.myfinancial.model.service.UserService;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,13 +21,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private CustomerMapper customerMapper;
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -34,15 +38,15 @@ public class UserServiceImpl implements UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
-    public UserResponse findById(final Long id) {
+    public CustomerResponse findById(final Long id) {
 
         final Customer customer = customerRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Usuário"));
 
-        return new UserResponse(customer);
+        return customerMapper.toReponse(customer);
     }
 
 
-    public UserResponse findByIdAndUser(final Long id) {
+    public CustomerResponse findByIdAndCustomer(final Long id) {
 
         final Customer customerAuthenticated = getAuthenticatedUser();
 
@@ -52,15 +56,15 @@ public class UserServiceImpl implements UserService {
             throw new AuthorizationException();
         }
 
-        return new UserResponse(customer);
+        return customerMapper.toReponse(customer);
     }
 
 
-    public List<UserResponse> findAll() {
+    public List<CustomerResponse> findAllByUser() {
 
         List<Customer> customerList = customerRepository.findAll();
 
-        return customerList.stream().map(user -> new UserResponse(user)).collect(Collectors.toList());
+        return customerMapper.toResponseList(customerList);
     }
 
 
@@ -74,54 +78,46 @@ public class UserServiceImpl implements UserService {
 
 
     @Transactional
-    public Long create(final UserRequest userRequest) {
+    public Long create(final CustomerRequest customerRequest) {
 
-        if (customerRepository.findByEmail(userRequest.getEmail()).isPresent()) {
-            throw new EmailExistingException();
-        }
+        customerRepository.findByEmail(customerRequest.getEmail()).ifPresent(customer -> new EmailExistingException());
 
-        Customer customer = new Customer(userRequest);
-        customer.setPassword(bCryptPasswordEncoder.encode(userRequest.getPassword()));
+        Customer customer = customerMapper.to(customerRequest);
+
+        final String generatedString = RandomStringUtils.randomAlphanumeric(10);
+        customer.setPassword(bCryptPasswordEncoder.encode(generatedString));
 
         final Long id = customerRepository.save(customer).getId();
 
-//        try {
-            emailService.sendAccountCreatedConfirmationEmail(userRequest);
-//        } catch (Exception e) {
-//            throw new EmailSenderException("Não foi possível enviar o email, o novo usuário não foi criado!");
-//        }
+        emailService.sendAccountCreatedConfirmationEmail(customerRequest, generatedString);
 
         return id;
     }
 
 
     @Transactional
-    public void update(final Long id, final UserRequest userRequest) {
+    public void update(final CustomerRequest customerRequest) {
 
-        findById(id);
+        findById(customerRequest.getId());
 
         Customer customer = getAuthenticatedUser();
 
-        if (customer.getId() != id && !customer.getProfileList().contains(ProfileType.ADMIN.getCod())) {
+        if (!customer.getId().equals(customerRequest.getId()) && !customer.getProfileType().equals((ProfileType.ADMIN))) {
             throw new AuthorizationException();
         }
 
-        if (!customer.getProfileList().contains(ProfileType.ADMIN.getCod()) && userRequest.getProfileListSring().contains(ProfileType.ADMIN.getName())) {
+        if (!customer.getProfileType().equals(ProfileType.ADMIN) && customerRequest.getProfileType().equals(ProfileType.ADMIN.getName())) {
             throw new AuthorizationException();
         }
 
-        Optional<Customer> userOptional = customerRepository.findByEmail(userRequest.getEmail());
+        Optional<Customer> userOptional = customerRepository.findByEmail(customerRequest.getEmail());
 
-        if (userOptional.isPresent() && userOptional.get().getId() != id) {
+        if (userOptional.isPresent() && !userOptional.get().getId().equals(customerRequest.getId())) {
             throw new EmailExistingException();
         }
 
-        if (!customer.getPassword().equals(userRequest.getPassword())) {
-            userRequest.setPassword(bCryptPasswordEncoder.encode(userRequest.getPassword()));
-        }
-
-        customer = customerRepository.getOne(id);
-        customer.updateUser(userRequest);
+        customer = customerRepository.getOne(customerRequest.getId());
+        customerMapper.toUpdate(customer, customerRequest);
 
         customerRepository.save(customer);
     }
@@ -129,13 +125,10 @@ public class UserServiceImpl implements UserService {
 
     public Customer getAuthenticatedUser() {
 
-
         try {
             final UserSpringSecurity userSpringSecurity = (UserSpringSecurity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-            final Customer customer = new Customer(userSpringSecurity);
-
-            return customer;
+            return customerRepository.findByEmail(userSpringSecurity.getEmail()).orElseThrow(() -> new ObjectNotFoundException("Usuário"));
 
         } catch (Exception e) {
             throw new AuthorizationException();

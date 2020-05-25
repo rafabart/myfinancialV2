@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -22,6 +24,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         final Customer customer = customerRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
 
-        return new UserSpringSecurity(customer.getId(), customer.getEmail(), customer.getPassword(), customer.getProfiles());
+        return new UserSpringSecurity(customer.getId(), customer.getEmail(), customer.getPassword(), Collections.singleton(customer.getProfileType()));
     }
 }

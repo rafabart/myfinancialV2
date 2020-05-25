@@ -1,17 +1,19 @@
 package com.myfinancial.model.service.impl;
 
 import com.myfinancial.model.domain.entity.Customer;
+import com.myfinancial.model.domain.request.NewPasswordRequest;
 import com.myfinancial.model.exception.EmailSenderException;
 import com.myfinancial.model.exception.ObjectNotFoundException;
+import com.myfinancial.model.exception.PasswordMatchException;
 import com.myfinancial.model.repository.CustomerRepository;
 import com.myfinancial.model.service.AuthService;
+import com.myfinancial.model.service.CustomerService;
 import com.myfinancial.model.service.EmailService;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Random;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -23,9 +25,10 @@ public class AuthServiceImpl implements AuthService {
     private CustomerRepository customerRepository;
 
     @Autowired
-    private EmailService emailService;
+    private CustomerService customerService;
 
-    private Random random = new Random();
+    @Autowired
+    private EmailService emailService;
 
 
     @Transactional
@@ -33,7 +36,7 @@ public class AuthServiceImpl implements AuthService {
 
         Customer customer = customerRepository.findByEmail(email).orElseThrow(() -> new ObjectNotFoundException("Email"));
 
-        String newPass = newPassword();
+        String newPass = RandomStringUtils.randomAlphanumeric(10);
         customer.setPassword(bCryptPasswordEncoder.encode(newPass));
 
         customerRepository.save(customer);
@@ -44,33 +47,16 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
+    @Transactional
+    public void changePassword(final NewPasswordRequest newPasswordRequest) {
 
-    private String newPassword() {
-
-        char[] vet = new char[10];
-
-        for (int i = 0; i < 10; i++) {
-            vet[i] = randomChar();
+        if (!newPasswordRequest.getConfirmPassword().equals(newPasswordRequest.getPassword())) {
+            throw new PasswordMatchException();
         }
 
-        return new String(vet);
+        Customer customer = customerService.getAuthenticatedUser();
+        customer.setPassword(bCryptPasswordEncoder.encode(newPasswordRequest.getPassword()));
 
-    }
-
-
-    private char randomChar() {
-
-        int opt = random.nextInt(3);
-
-        //gera um digito
-        if (opt == 0) {
-            return (char) (random.nextInt(10) + 48);
-            //gera letra maiuscula
-        } else if (opt == 1) {
-            return (char) (random.nextInt(26) + 65);
-            // gera letra minuscula
-        } else {
-            return (char) (random.nextInt(10) + 97);
-        }
+        customerRepository.save(customer);
     }
 }

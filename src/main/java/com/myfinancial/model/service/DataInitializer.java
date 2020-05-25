@@ -1,20 +1,20 @@
 package com.myfinancial.model.service;
 
 import com.myfinancial.model.domain.entity.Category;
-import com.myfinancial.model.domain.entity.Expense;
 import com.myfinancial.model.domain.entity.Customer;
+import com.myfinancial.model.domain.entity.Expense;
 import com.myfinancial.model.domain.enums.ExpenseType;
 import com.myfinancial.model.domain.enums.ProfileType;
 import com.myfinancial.model.repository.CategoryRepository;
-import com.myfinancial.model.repository.ExpendeRepository;
 import com.myfinancial.model.repository.CustomerRepository;
+import com.myfinancial.model.repository.ExpendeRepository;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.HashSet;
 
 @Service
 public class DataInitializer implements Runnable {
@@ -32,14 +32,11 @@ public class DataInitializer implements Runnable {
     @Override
     public void run() {
 
-        Customer customerOne = new Customer("Rafael Marinho", "rafamola@gmail.com", new BCryptPasswordEncoder().encode("123456"),
-                null, null, new HashSet<>(Arrays.asList(ProfileType.ADMIN.getCod(), ProfileType.USER.getCod())));
-        Customer customerTwo = new Customer("Corona Vírus", "corona@gmail.com", new BCryptPasswordEncoder().encode("123456"),
-                null, null, new HashSet<>(Arrays.asList(ProfileType.USER.getCod())));
+        Customer customerOne = new Customer("Rafael Marinho", "rafamola@gmail.com", new BCryptPasswordEncoder().encode("123456"), ProfileType.ADMIN);
+        Customer customerTwo = new Customer("Corona Vírus", "corona@gmail.com", new BCryptPasswordEncoder().encode("123456"), ProfileType.USER);
 
         customerOne = customerRepository.save(customerOne);
         customerTwo = customerRepository.save(customerTwo);
-
 
         Category categoryOne = new Category("Educação", customerOne);
         Category categoryTwo = new Category("Diversão", customerOne);
@@ -55,7 +52,6 @@ public class DataInitializer implements Runnable {
         categoryFive = categoryRepository.save(categoryFour);
 
         LocalDate dateOne = LocalDate.now();
-
         LocalDate dateTwo = dateOne.plusDays(3);
 
         Expense expenseOne = new Expense("Faculdade", 450.00D, dateTwo, dateOne, ExpenseType.EXPENSE, customerOne, categoryOne);
@@ -67,11 +63,5 @@ public class DataInitializer implements Runnable {
         Expense expenseSix = new Expense("Loja", 600.00D, null, dateOne, ExpenseType.INCOME, customerTwo, categoryFour);
 
         expendeRepository.saveAll(Arrays.asList(expenseOne, expenseTwo, expenseThree, expenseSeven, expenseFour, expenseFive, expenseSix));
-
-        expendeRepository.findAll().forEach(expense -> System.out.println(expense));
-
-        categoryRepository.findAll().forEach(category -> System.out.println(category));
-
-        customerRepository.findAll().forEach(user -> System.out.println(user));
     }
 }

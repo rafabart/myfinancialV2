@@ -1,11 +1,11 @@
-#   active:
-#            dev-local  (H2 Database)
-#            dev        (Postgres Database)
-#            prod       (Heroku Postgres Database with flyway)
+# Profiles actives:
+#     dev        (H2 Database - LOCAL)
+#     qa         (Postgres Database)
+#     prod       (Heroku Postgres Database with flyway)
 
 spring:
   profiles:
-    active: ${APP_PROFILE:dev-local}
+    active: ${APP_PROFILE:dev}
 
 
   datasource:
@@ -23,7 +23,7 @@ spring:
       hibernate:
         format_sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
 
 
   flyway:

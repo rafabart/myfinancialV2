@@ -1,15 +1,13 @@
 package com.myfinancial.model.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper=false)
 public class ValidationError extends StandardError {
 
 

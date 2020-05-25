@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "expense")
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class Expense extends IdAbstract {

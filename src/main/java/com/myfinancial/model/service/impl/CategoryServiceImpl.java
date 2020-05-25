@@ -9,7 +9,7 @@ import com.myfinancial.model.exception.ObjectNotFoundException;
 import com.myfinancial.model.mapper.CategoryMapper;
 import com.myfinancial.model.repository.CategoryRepository;
 import com.myfinancial.model.service.CategoryService;
-import com.myfinancial.model.service.UserService;
+import com.myfinancial.model.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,12 +27,12 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryMapper categoryMapper;
 
     @Autowired
-    private UserService userService;
+    private CustomerService customerService;
 
 
     public CategoryResponse findByIdAndCustomer(final Long id) {
 
-        final Customer customer = userService.getAuthenticatedUser();
+        final Customer customer = customerService.getAuthenticatedUser();
 
         final Category category = categoryRepository.findByIdAndCustomer(id, customer).orElseThrow(() -> new ObjectNotFoundException("Categoria"));
 
@@ -42,7 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     public List<CategoryResponse> findAllByCustomer() {
 
-        final Customer customer = userService.getAuthenticatedUser();
+        final Customer customer = customerService.getAuthenticatedUser();
 
         final List<Category> categoryList = categoryRepository.findAllByCustomer(customer);
 
@@ -53,7 +53,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public Long create(final CategoryRequest categoryRequest) {
 
-        final Customer customer = userService.getAuthenticatedUser();
+        final Customer customer = customerService.getAuthenticatedUser();
 
         categoryRepository.findByNameIgnoreCaseAndCustomer(categoryRequest.getName(), customer)
                 .ifPresent(category -> new CategoryExistingException());

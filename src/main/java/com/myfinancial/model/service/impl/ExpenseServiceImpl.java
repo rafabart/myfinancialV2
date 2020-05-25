@@ -9,13 +9,12 @@ import com.myfinancial.model.mapper.ExpenseMapper;
 import com.myfinancial.model.repository.ExpendeRepository;
 import com.myfinancial.model.service.CategoryService;
 import com.myfinancial.model.service.ExpenseService;
-import com.myfinancial.model.service.UserService;
+import com.myfinancial.model.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ExpenseServiceImpl implements ExpenseService {
@@ -30,12 +29,12 @@ public class ExpenseServiceImpl implements ExpenseService {
     private CategoryService categoryService;
 
     @Autowired
-    private UserService userService;
+    private CustomerService customerService;
 
 
     public ExpenseResponse findByIdAndUser(final Long id) {
 
-        final Customer customer = userService.getAuthenticatedUser();
+        final Customer customer = customerService.getAuthenticatedUser();
 
         final Expense expense = expendeRepository.findByIdAndCustomer(id, customer).orElseThrow(() -> new ObjectNotFoundException("Lançamento"));
 
@@ -45,7 +44,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     public List<ExpenseResponse> findAllByUser() {
 
-        final Customer customer = userService.getAuthenticatedUser();
+        final Customer customer = customerService.getAuthenticatedUser();
 
         final List<Expense> expenseList = expendeRepository.findAllByCustomer(customer);
 
@@ -67,7 +66,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         categoryService.findByIdAndCustomer(expenseRequest.getCategory().getId());
 
-        final Customer customer = userService.getAuthenticatedUser();
+        final Customer customer = customerService.getAuthenticatedUser();
 
         Expense expense = expenseMapper.to(expenseRequest, customer);
 

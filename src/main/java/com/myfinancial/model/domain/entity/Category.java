@@ -13,6 +13,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @RequiredArgsConstructor
+@Table(name = "category")
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class Category extends IdAbstract {
