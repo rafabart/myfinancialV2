@@ -12,23 +12,22 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {CategoryMapper.class})
 public interface ExpenseMapper {
 
-
-    @Mapping(target = "expenseType", ignore = true)
-    @Mapping(source = "customer", target = "customer")
-    @Mapping(source = "expenseRequest.id", target = "id")
+    @Mapping(target = "expenseType", source = "expenseRequest.expenseType", qualifiedByName = "expenseTypeMapper")
+    @Mapping(target = "customer", source = "customer")
+    @Mapping(target = "id", source = "expenseRequest.id")
     Expense to(final ExpenseRequest expenseRequest, final Customer customer);
 
-    @Mapping(target = "expenseType", ignore = true)
+    @Mapping(target = "expenseType", source = "expenseType", qualifiedByName = "expenseTypeMapper")
     void toUpdate(@MappingTarget Expense expense, final ExpenseRequest expenseRequest);
 
-    @Mapping(source = "expenseType.name", target = "expenseType")
+    @Mapping(target = "expenseType", source = "expenseType.name")
     ExpenseResponse toReponse(final Expense expense);
 
     List<ExpenseResponse> toResponseList(final List<Expense> expenseList);
 
 
-    @AfterMapping
-    default void setExpenseType(@MappingTarget Expense expense, final ExpenseRequest expenseRequest) {
-        expense.setExpenseType(ExpenseType.toEnum(expenseRequest.getExpenseType()));
+    @Named("expenseTypeMapper")
+    default ExpenseType expenseTypeMapper(final String expenseType) {
+        return ExpenseType.toEnum(expenseType);
     }
 }

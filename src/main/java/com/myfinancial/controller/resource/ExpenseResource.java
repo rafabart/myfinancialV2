@@ -14,14 +14,14 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/expenses")
+@RequestMapping(value = "/expenses", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ExpenseResource {
 
     @Autowired
     private ExpenseService expenseService;
 
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/{id}")
     public ResponseEntity<ExpenseResponse> findByIdAndUser(@PathVariable("id") final Long id) {
 
         final ExpenseResponse expenseResponse = expenseService.findByIdAndUser(id);
@@ -30,7 +30,7 @@ public class ExpenseResource {
     }
 
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping
     public ResponseEntity<List<ExpenseResponse>> findAllByUser() {
 
         final List<ExpenseResponse> expenseResponseList = expenseService.findAllByUser();
@@ -48,7 +48,7 @@ public class ExpenseResource {
     }
 
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping
     public ResponseEntity<URI> create(@Valid @RequestBody final ExpenseRequest expenseRequest) {
 
         final Long id = expenseService.create(expenseRequest);
@@ -62,7 +62,7 @@ public class ExpenseResource {
     }
 
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping
     public ResponseEntity<Void> update(@Valid @RequestBody ExpenseRequest expenseRequest) {
 
         expenseService.update(expenseRequest);

@@ -8,7 +8,6 @@ import com.myfinancial.model.domain.enums.ProfileType;
 import com.myfinancial.model.repository.CategoryRepository;
 import com.myfinancial.model.repository.CustomerRepository;
 import com.myfinancial.model.repository.ExpendeRepository;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,6 +40,7 @@ public class DataInitializer implements Runnable {
         Category categoryOne = new Category("Educação", customerOne);
         Category categoryTwo = new Category("Diversão", customerOne);
         Category categoryFive = new Category("Salario", customerOne);
+        Category categoryFi = new Category();
 
         Category categoryThree = new Category("Educação", customerTwo);
         Category categoryFour = new Category("Aluguel", customerTwo);

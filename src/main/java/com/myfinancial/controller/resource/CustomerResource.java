@@ -15,7 +15,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/customers")
+@RequestMapping(value = "/customers", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CustomerResource {
 
 
@@ -23,8 +23,8 @@ public class CustomerResource {
     private CustomerService customerService;
 
 
+    @GetMapping("/admin/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    @GetMapping(value = "/admin/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CustomerResponse> findById(@PathVariable("id") final Long id) {
 
         CustomerResponse customerResponse = customerService.findById(id);
@@ -33,7 +33,7 @@ public class CustomerResource {
     }
 
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/{id}")
     public ResponseEntity<CustomerResponse> findByIdAndUser(@PathVariable("id") final Long id) {
 
         CustomerResponse customerResponse = customerService.findByIdAndCustomer(id);
@@ -42,8 +42,8 @@ public class CustomerResource {
     }
 
 
+    @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN')")
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CustomerResponse>> findAll() {
 
         List<CustomerResponse> customerResponseList = customerService.findAllByUser();
@@ -62,8 +62,8 @@ public class CustomerResource {
     }
 
 
+    @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN')")
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<URI> create(@Valid @RequestBody final CustomerRequest customerRequest) {
 
         final Long id = customerService.create(customerRequest);
@@ -77,7 +77,7 @@ public class CustomerResource {
     }
 
 
-    @PutMapping()
+    @PutMapping
     public ResponseEntity<Void> update(@Valid @RequestBody final CustomerRequest customerRequest) {
 
         customerService.update(customerRequest);

@@ -14,14 +14,14 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/categories")
+@RequestMapping(value = "/categories", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CategoryResource {
 
     @Autowired
     private CategoryService categoryService;
 
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/{id}")
     public ResponseEntity<CategoryResponse> findByIdAndUser(@PathVariable("id") final Long id) {
 
         final CategoryResponse categoryResponse = categoryService.findByIdAndCustomer(id);
@@ -30,7 +30,7 @@ public class CategoryResource {
     }
 
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping
     public ResponseEntity<List<CategoryResponse>> findAllByUser() {
 
         final List<CategoryResponse> categoryResponseList = categoryService.findAllByCustomer();
@@ -48,7 +48,7 @@ public class CategoryResource {
     }
 
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping
     public ResponseEntity<URI> create(@Valid @RequestBody final CategoryRequest categoryRequest) {
 
         final Long id = categoryService.create(categoryRequest);
@@ -62,7 +62,7 @@ public class CategoryResource {
     }
 
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping
     public ResponseEntity<Void> update(@Valid @RequestBody final CategoryRequest categoryRequest) {
 
         categoryService.update(categoryRequest);
