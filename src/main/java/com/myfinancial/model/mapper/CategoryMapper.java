@@ -9,8 +9,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
-import java.util.List;
-
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CategoryMapper {
 
@@ -22,6 +20,4 @@ public interface CategoryMapper {
     void toUpdate(@MappingTarget Category category, final CategoryRequest categoryRequest);
 
     CategoryResponse toReponse(final Category category);
-
-    List<CategoryResponse> toResponseList(final List<Category> categoryList);
 }

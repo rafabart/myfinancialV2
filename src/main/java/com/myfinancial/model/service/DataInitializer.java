@@ -37,10 +37,11 @@ public class DataInitializer implements Runnable {
         customerOne = customerRepository.save(customerOne);
         customerTwo = customerRepository.save(customerTwo);
 
+
         Category categoryOne = new Category("Educação", customerOne);
         Category categoryTwo = new Category("Diversão", customerOne);
         Category categoryFive = new Category("Salario", customerOne);
-        Category categoryFi = new Category();
+
 
         Category categoryThree = new Category("Educação", customerTwo);
         Category categoryFour = new Category("Aluguel", customerTwo);
@@ -50,6 +51,15 @@ public class DataInitializer implements Runnable {
         categoryThree = categoryRepository.save(categoryThree);
         categoryFour = categoryRepository.save(categoryFour);
         categoryFive = categoryRepository.save(categoryFour);
+
+
+        for (int i = 0; i < 100; i++) {
+            Category category = new Category();
+            category.setCustomer(customerOne);
+            category.setName("Categoria" + i);
+
+            categoryRepository.save(category);
+        }
 
         LocalDate dateOne = LocalDate.now();
         LocalDate dateTwo = dateOne.plusDays(3);

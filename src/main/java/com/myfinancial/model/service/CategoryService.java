@@ -2,14 +2,16 @@ package com.myfinancial.model.service;
 
 import com.myfinancial.model.domain.request.CategoryRequest;
 import com.myfinancial.model.domain.response.CategoryResponse;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface CategoryService {
 
     CategoryResponse findByIdAndCustomer(final Long id);
 
-    List<CategoryResponse> findAllByCustomer();
+    Page<CategoryResponse> findAllByCustomer(final String searchText, final Pageable pageable);
+
+    Page<CategoryResponse> findAllByCustomer(final Pageable pageable);
 
     Long create(final CategoryRequest categoryRequest);
 

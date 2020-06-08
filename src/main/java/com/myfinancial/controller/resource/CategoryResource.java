@@ -4,6 +4,8 @@ import com.myfinancial.model.domain.request.CategoryRequest;
 import com.myfinancial.model.domain.response.CategoryResponse;
 import com.myfinancial.model.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +13,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/categories", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -30,10 +31,20 @@ public class CategoryResource {
     }
 
 
-    @GetMapping
-    public ResponseEntity<List<CategoryResponse>> findAllByUser() {
+    @GetMapping("/find/{searchText}")
+    public ResponseEntity<Page<CategoryResponse>> findAllByUser(@PathVariable("searchText") final String searchText,
+                                                                final Pageable pageable) {
 
-        final List<CategoryResponse> categoryResponseList = categoryService.findAllByCustomer();
+        final Page<CategoryResponse> categoryResponseList = categoryService.findAllByCustomer(searchText, pageable);
+
+        return ResponseEntity.ok(categoryResponseList);
+    }
+
+
+    @GetMapping
+    public ResponseEntity<Page<CategoryResponse>> findAllByUser(final Pageable pageable) {
+
+        final Page<CategoryResponse> categoryResponseList = categoryService.findAllByCustomer(pageable);
 
         return ResponseEntity.ok(categoryResponseList);
     }

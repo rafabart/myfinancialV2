@@ -11,10 +11,10 @@ import com.myfinancial.model.repository.CategoryRepository;
 import com.myfinancial.model.service.CategoryService;
 import com.myfinancial.model.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -40,13 +40,19 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
 
-    public List<CategoryResponse> findAllByCustomer() {
+    public Page<CategoryResponse> findAllByCustomer(final String searchText, final Pageable pageable) {
 
         final Customer customer = customerService.getAuthenticatedUser();
 
-        final List<Category> categoryList = categoryRepository.findAllByCustomer(customer);
+        return categoryRepository.findAllByCustomer(customer, searchText, pageable).map(categoryMapper::toReponse);
+    }
 
-        return categoryMapper.toResponseList(categoryList);
+
+    public Page<CategoryResponse> findAllByCustomer(final Pageable pageable) {
+
+        final Customer customer = customerService.getAuthenticatedUser();
+
+        return categoryRepository.findAllByCustomer(customer, pageable).map(categoryMapper::toReponse);
     }
 
 
