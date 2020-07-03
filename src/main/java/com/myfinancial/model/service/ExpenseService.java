@@ -2,14 +2,16 @@ package com.myfinancial.model.service;
 
 import com.myfinancial.model.domain.request.ExpenseRequest;
 import com.myfinancial.model.domain.response.ExpenseResponse;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ExpenseService {
 
-    ExpenseResponse findByIdAndUser(final Long id);
+    ExpenseResponse findById(final Long id);
 
-    List<ExpenseResponse> findAllByUser();
+    Page<ExpenseResponse> findAll(final Integer searchMonth, final Integer searchYear, final Pageable pageable);
+
+    Page<ExpenseResponse> findAll(final String searchText, final Pageable pageable);
 
     void delete(final Long id);
 

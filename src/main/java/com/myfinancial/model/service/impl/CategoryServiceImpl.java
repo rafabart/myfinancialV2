@@ -30,7 +30,7 @@ public class CategoryServiceImpl implements CategoryService {
     private CustomerService customerService;
 
 
-    public CategoryResponse findByIdAndCustomer(final Long id) {
+    public CategoryResponse findById(final Long id) {
 
         final Customer customer = customerService.getAuthenticatedUser();
 
@@ -40,7 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
 
-    public Page<CategoryResponse> findAllByCustomer(final String searchText, final Pageable pageable) {
+    public Page<CategoryResponse> findAll(final String searchText, final Pageable pageable) {
 
         final Customer customer = customerService.getAuthenticatedUser();
 
@@ -48,7 +48,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
 
-    public Page<CategoryResponse> findAllByCustomer(final Pageable pageable) {
+    public Page<CategoryResponse> findAll(final Pageable pageable) {
 
         final Customer customer = customerService.getAuthenticatedUser();
 
@@ -61,8 +61,10 @@ public class CategoryServiceImpl implements CategoryService {
 
         final Customer customer = customerService.getAuthenticatedUser();
 
-        categoryRepository.findByNameIgnoreCaseAndCustomer(categoryRequest.getName(), customer)
-                .ifPresent(category -> new CategoryExistingException());
+        categoryRepository.findByNameIgnoreCaseAndCustomer(categoryRequest.getName(), customer).ifPresent(category -> {
+            throw new CategoryExistingException();
+        });
+
 
         Category category = categoryMapper.to(categoryRequest, customer);
 
@@ -73,7 +75,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public void delete(final Long id) {
 
-        findByIdAndCustomer(id);
+        this.findById(id);
 
         categoryRepository.deleteById(id);
     }
@@ -82,7 +84,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public void update(final CategoryRequest categoryRequest) {
 
-        findByIdAndCustomer(categoryRequest.getId());
+        this.findById(categoryRequest.getId());
 
         Category category = categoryRepository.getOne(categoryRequest.getId());
 

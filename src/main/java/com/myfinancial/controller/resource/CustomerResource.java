@@ -25,7 +25,7 @@ public class CustomerResource {
 
     @GetMapping("/admin/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<CustomerResponse> findById(@PathVariable("id") final Long id) {
+    public ResponseEntity<CustomerResponse> findByIdAdmin(@PathVariable("id") final Long id) {
 
         CustomerResponse customerResponse = customerService.findById(id);
 
@@ -34,7 +34,7 @@ public class CustomerResource {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<CustomerResponse> findByIdAndUser(@PathVariable("id") final Long id) {
+    public ResponseEntity<CustomerResponse> findById(@PathVariable("id") final Long id) {
 
         CustomerResponse customerResponse = customerService.findByIdAndCustomer(id);
 

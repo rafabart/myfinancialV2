@@ -7,7 +7,7 @@ import com.myfinancial.model.domain.enums.ExpenseType;
 import com.myfinancial.model.domain.enums.ProfileType;
 import com.myfinancial.model.repository.CategoryRepository;
 import com.myfinancial.model.repository.CustomerRepository;
-import com.myfinancial.model.repository.ExpendeRepository;
+import com.myfinancial.model.repository.ExpenseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class DataInitializer implements Runnable {
     private CategoryRepository categoryRepository;
 
     @Autowired
-    private ExpendeRepository expendeRepository;
+    private ExpenseRepository expenseRepository;
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -64,14 +64,40 @@ public class DataInitializer implements Runnable {
         LocalDate dateOne = LocalDate.now();
         LocalDate dateTwo = dateOne.plusDays(3);
 
-        Expense expenseOne = new Expense("Faculdade", 450.00D, dateTwo, dateOne, ExpenseType.EXPENSE, customerOne, categoryOne);
-        Expense expenseTwo = new Expense("Curso de Inglês", 179.99D, dateTwo, dateOne, ExpenseType.EXPENSE, customerOne, categoryOne);
-        Expense expenseThree = new Expense("Toca do Lobo", 180.00D, dateTwo, dateOne, ExpenseType.EXPENSE, customerOne, categoryTwo);
-        Expense expenseSeven = new Expense("Salario", 180.00D, null, dateOne, ExpenseType.INCOME, customerOne, categoryFive);
-        Expense expenseFour = new Expense("Faculdade", 320.45D, dateTwo, dateOne, ExpenseType.EXPENSE, customerTwo, categoryThree);
-        Expense expenseFive = new Expense("Moradia", 550.00D, dateTwo, dateOne, ExpenseType.EXPENSE, customerTwo, categoryFour);
-        Expense expenseSix = new Expense("Loja", 600.00D, null, dateOne, ExpenseType.INCOME, customerTwo, categoryFour);
+        Expense expenseOne = new Expense("Faculdade", 450.00D, dateOne, dateTwo, ExpenseType.EXPENSE, customerOne, categoryOne);
+        Expense expenseTwo = new Expense("Curso de Inglês", 179.99D, dateOne, dateTwo, ExpenseType.EXPENSE, customerOne, categoryOne);
+        Expense expenseThree = new Expense("Toca do Lobo", 180.00D, dateOne, dateTwo, ExpenseType.EXPENSE, customerOne, categoryTwo);
+        Expense expenseSeven = new Expense("Salario", 180.00D, dateOne, null, ExpenseType.INCOME, customerOne, categoryFive);
+        Expense expenseFour = new Expense("Faculdade", 320.45D, dateOne, null, ExpenseType.EXPENSE, customerTwo, categoryThree);
+        Expense expenseFive = new Expense("Moradia", 550.00D, dateOne, null, ExpenseType.EXPENSE, customerTwo, categoryFour);
+        Expense expenseSix = new Expense("Loja", 600.00D, dateOne, dateTwo, ExpenseType.INCOME, customerTwo, categoryFour);
 
-        expendeRepository.saveAll(Arrays.asList(expenseOne, expenseTwo, expenseThree, expenseSeven, expenseFour, expenseFive, expenseSix));
+        expenseRepository.saveAll(Arrays.asList(expenseOne, expenseTwo, expenseThree, expenseSeven, expenseFour, expenseFive, expenseSix));
+
+        for (int i = 0; i < 50; i++) {
+            Expense expense = new Expense();
+            expense.setCustomer(customerOne);
+            expense.setCategory(categoryTwo);
+            expense.setExpenseType(ExpenseType.INCOME);
+            expense.setPaymentDate(dateOne.plusYears(1));
+            expense.setDueDate(dateOne.plusYears(1));
+            expense.setValue(i + 1 * 50D);
+            expense.setDescription("Descrição" + i);
+
+            expenseRepository.save(expense);
+        }
+
+        for (int i = 0; i < 50; i++) {
+            Expense expense = new Expense();
+            expense.setCustomer(customerOne);
+            expense.setCategory(categoryOne);
+            expense.setExpenseType(ExpenseType.EXPENSE);
+            expense.setPaymentDate(dateOne.plusMonths(1));
+            expense.setDueDate(dateTwo.minusMonths(1));
+            expense.setValue(i + 1 * 100D);
+            expense.setDescription("Outra Descrição bem mais longa que o normal" + i);
+
+            expenseRepository.save(expense);
+        }
     }
 }

@@ -4,6 +4,8 @@ import com.myfinancial.model.domain.request.ExpenseRequest;
 import com.myfinancial.model.domain.response.ExpenseResponse;
 import com.myfinancial.model.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +13,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/expenses", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -22,18 +23,30 @@ public class ExpenseResource {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<ExpenseResponse> findByIdAndUser(@PathVariable("id") final Long id) {
+    public ResponseEntity<ExpenseResponse> findById(@PathVariable("id") final Long id) {
 
-        final ExpenseResponse expenseResponse = expenseService.findByIdAndUser(id);
+        final ExpenseResponse expenseResponse = expenseService.findById(id);
 
         return ResponseEntity.ok(expenseResponse);
     }
 
 
-    @GetMapping
-    public ResponseEntity<List<ExpenseResponse>> findAllByUser() {
+    @GetMapping("/find/{searchText}")
+    public ResponseEntity<Page<ExpenseResponse>> findAll(@PathVariable("searchText") final String searchText,
+                                                         final Pageable pageable) {
 
-        final List<ExpenseResponse> expenseResponseList = expenseService.findAllByUser();
+        final Page<ExpenseResponse> expenseResponseList = expenseService.findAll(searchText, pageable);
+
+        return ResponseEntity.ok(expenseResponseList);
+    }
+
+
+    @GetMapping("/{searchMonth}/{searchYear}")
+    public ResponseEntity<Page<ExpenseResponse>> findAll(@PathVariable("searchMonth") final Integer searchMonth,
+                                                         @PathVariable("searchYear") final Integer searchYear,
+                                                         final Pageable pageable) {
+
+        final Page<ExpenseResponse> expenseResponseList = expenseService.findAll(searchMonth, searchYear, pageable);
 
         return ResponseEntity.ok(expenseResponseList);
     }

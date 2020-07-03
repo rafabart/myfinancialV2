@@ -23,28 +23,28 @@ public class CategoryResource {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryResponse> findByIdAndUser(@PathVariable("id") final Long id) {
+    public ResponseEntity<CategoryResponse> findByIdAndCustomer(@PathVariable("id") final Long id) {
 
-        final CategoryResponse categoryResponse = categoryService.findByIdAndCustomer(id);
+        final CategoryResponse categoryResponse = categoryService.findById(id);
 
         return ResponseEntity.ok(categoryResponse);
     }
 
 
     @GetMapping("/find/{searchText}")
-    public ResponseEntity<Page<CategoryResponse>> findAllByUser(@PathVariable("searchText") final String searchText,
+    public ResponseEntity<Page<CategoryResponse>> findAllByCustomer(@PathVariable("searchText") final String searchText,
                                                                 final Pageable pageable) {
 
-        final Page<CategoryResponse> categoryResponseList = categoryService.findAllByCustomer(searchText, pageable);
+        final Page<CategoryResponse> categoryResponseList = categoryService.findAll(searchText, pageable);
 
         return ResponseEntity.ok(categoryResponseList);
     }
 
 
     @GetMapping
-    public ResponseEntity<Page<CategoryResponse>> findAllByUser(final Pageable pageable) {
+    public ResponseEntity<Page<CategoryResponse>> findAllByCustomer(final Pageable pageable) {
 
-        final Page<CategoryResponse> categoryResponseList = categoryService.findAllByCustomer(pageable);
+        final Page<CategoryResponse> categoryResponseList = categoryService.findAll(pageable);
 
         return ResponseEntity.ok(categoryResponseList);
     }

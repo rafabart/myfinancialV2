@@ -29,6 +29,8 @@ public class Expense extends IdAbstract {
     @Column(nullable = false, precision = 10, scale = 2)
     private Double value;
 
+    @NotNull
+    @Column(nullable = false)
     private LocalDate dueDate;
 
     private LocalDate paymentDate;
